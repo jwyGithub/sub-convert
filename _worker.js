@@ -3,8 +3,8 @@ var nt = (e) => {
   throw TypeError(e);
 };
 var sr = (e, r, t) => r in e ? or(e, r, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[r] = t;
-var k = (e, r, t) => sr(e, typeof r != "symbol" ? r + "" : r, t), Be = (e, r, t) => r.has(e) || nt("Cannot " + t);
-var p = (e, r, t) => (Be(e, r, "read from private field"), t ? t.call(e) : r.get(e)), x = (e, r, t) => r.has(e) ? nt("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), w = (e, r, t, i) => (Be(e, r, "write to private field"), i ? i.call(e, t) : r.set(e, t), t), ot = (e, r, t) => (Be(e, r, "access private method"), t);
+var k = (e, r, t) => sr(e, typeof r != "symbol" ? r + "" : r, t), Ve = (e, r, t) => r.has(e) || nt("Cannot " + t);
+var p = (e, r, t) => (Ve(e, r, "read from private field"), t ? t.call(e) : r.get(e)), x = (e, r, t) => r.has(e) ? nt("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), w = (e, r, t, i) => (Ve(e, r, "write to private field"), i ? i.call(e, t) : r.set(e, t), t), ot = (e, r, t) => (Ve(e, r, "access private method"), t);
 function At() {
   return [
     { label: "Clash", value: "clash" },
@@ -2231,20 +2231,19 @@ function xr(e, r) {
 function yr(e, r) {
   var n;
   const { origin: t } = new URL(e.url);
-  return (((n = r.BACKEND) == null ? void 0 : n.split(`
+  return (((n = r.CUSTOM_BACKEND) == null ? void 0 : n.split(`
 `).filter(Boolean)) ?? []).reduce(
-    (o, s) => (o.unshift({ label: s, value: s }), o),
-    [
-      { label: t, value: t },
-      { label: "肥羊增强型后端【vless+hysteria】", value: "https://url.v1.mk" },
-      { label: "肥羊备用后端【vless+hysteria】", value: "https://sub.d1.mk" },
-      { label: "品云提供后端【实验性】", value: "https://v.id9.cc" },
-      { label: "つつ-多地防失联【负载均衡+国内优化】", value: "https://api.tsutsu.one" },
-      { label: "nameless13提供", value: "https://www.nameless13.com" },
-      { label: "subconverter作者提供", value: "https://sub.xeton.dev" },
-      { label: "sub-web作者提供", value: "https://api.wcc.best" },
-      { label: "sub作者&lhie1提供", value: "https://api.dler.io" }
-    ]
+    (o, s) => (o.push({ label: s, value: s }), o),
+    [{ label: t, value: t }]
+  ).concat(
+    { label: "肥羊增强型后端【vless+hysteria】", value: "https://url.v1.mk" },
+    { label: "肥羊备用后端【vless+hysteria】", value: "https://sub.d1.mk" },
+    { label: "品云提供后端【实验性】", value: "https://v.id9.cc" },
+    { label: "つつ-多地防失联【负载均衡+国内优化】", value: "https://api.tsutsu.one" },
+    { label: "nameless13提供", value: "https://www.nameless13.com" },
+    { label: "subconverter作者提供", value: "https://sub.xeton.dev" },
+    { label: "sub-web作者提供", value: "https://api.wcc.best" },
+    { label: "sub作者&lhie1提供", value: "https://api.dler.io" }
   );
 }
 function Cr() {
@@ -3043,7 +3042,7 @@ function Hr(e, r) {
 `;
   return a.replace(/\n$/, "");
 }
-var jr = Hr, Vr = [
+var jr = Hr, Br = [
   "kind",
   "multi",
   "resolve",
@@ -3054,7 +3053,7 @@ var jr = Hr, Vr = [
   "representName",
   "defaultStyle",
   "styleAliases"
-], Br = [
+], Vr = [
   "scalar",
   "sequence",
   "mapping"
@@ -3069,13 +3068,13 @@ function qr(e) {
 }
 function zr(e, r) {
   if (r = r || {}, Object.keys(r).forEach(function(t) {
-    if (Vr.indexOf(t) === -1)
+    if (Br.indexOf(t) === -1)
       throw new T('Unknown option "' + t + '" is met in definition of "' + e + '" YAML type.');
   }), this.options = r, this.tag = e, this.kind = r.kind || null, this.resolve = r.resolve || function() {
     return !0;
   }, this.construct = r.construct || function(t) {
     return t;
-  }, this.instanceOf = r.instanceOf || null, this.predicate = r.predicate || null, this.represent = r.represent || null, this.representName = r.representName || null, this.defaultStyle = r.defaultStyle || null, this.multi = r.multi || !1, this.styleAliases = qr(r.styleAliases || null), Br.indexOf(this.kind) === -1)
+  }, this.instanceOf = r.instanceOf || null, this.predicate = r.predicate || null, this.represent = r.represent || null, this.representName = r.representName || null, this.defaultStyle = r.defaultStyle || null, this.multi = r.multi || !1, this.styleAliases = qr(r.styleAliases || null), Vr.indexOf(this.kind) === -1)
     throw new T('Unknown kind "' + this.kind + '" is specified for "' + e + '" YAML type.');
 }
 var L = zr;
@@ -3487,12 +3486,12 @@ var ji = new L("tag:yaml.org,2002:pairs", {
   kind: "sequence",
   resolve: $i,
   construct: Hi
-}), Vi = Object.prototype.hasOwnProperty;
-function Bi(e) {
+}), Bi = Object.prototype.hasOwnProperty;
+function Vi(e) {
   if (e === null) return !0;
   var r, t = e;
   for (r in t)
-    if (Vi.call(t, r) && t[r] !== null)
+    if (Bi.call(t, r) && t[r] !== null)
       return !1;
   return !0;
 }
@@ -3501,7 +3500,7 @@ function qi(e) {
 }
 var zi = new L("tag:yaml.org,2002:set", {
   kind: "mapping",
-  resolve: Bi,
+  resolve: Vi,
   construct: qi
 }), It = yi.extend({
   implicit: [
@@ -3644,7 +3643,7 @@ function A(e, r, t) {
   }
   return t !== -1 && i !== 0 && e.lineIndent < t && Me(e, "deficient indentation"), i;
 }
-function Ve(e) {
+function Be(e) {
   var r = e.position, t;
   return t = e.input.charCodeAt(r), !!((t === 45 || t === 46) && t === e.input.charCodeAt(r + 1) && t === e.input.charCodeAt(r + 2) && (r += 3, t = e.input.charCodeAt(r), t === 0 || I(t)));
 }
@@ -3664,7 +3663,7 @@ function tn(e, r, t) {
       if (i = e.input.charCodeAt(e.position - 1), I(i))
         break;
     } else {
-      if (e.position === e.lineStart && Ve(e) || t && ce(h))
+      if (e.position === e.lineStart && Be(e) || t && ce(h))
         break;
       if (D(h))
         if (l = e.line, c = e.lineStart, d = e.lineIndent, A(e, !1, -1), e.lineIndent >= r) {
@@ -3689,7 +3688,7 @@ function rn(e, r) {
         i = e.position, e.position++, n = e.position;
       else
         return !0;
-    else D(t) ? (z(e, i, n, !0), et(e, A(e, !1, r)), i = n = e.position) : e.position === e.lineStart && Ve(e) ? b(e, "unexpected end of the document within a single quoted scalar") : (e.position++, n = e.position);
+    else D(t) ? (z(e, i, n, !0), et(e, A(e, !1, r)), i = n = e.position) : e.position === e.lineStart && Be(e) ? b(e, "unexpected end of the document within a single quoted scalar") : (e.position++, n = e.position);
   b(e, "unexpected end of the stream within a single quoted scalar");
 }
 function nn(e, r) {
@@ -3711,7 +3710,7 @@ function nn(e, r) {
       } else
         b(e, "unknown escape sequence");
       t = i = e.position;
-    } else D(a) ? (z(e, t, i, !0), et(e, A(e, !1, r)), t = i = e.position) : e.position === e.lineStart && Ve(e) ? b(e, "unexpected end of the document within a double quoted scalar") : (e.position++, i = e.position);
+    } else D(a) ? (z(e, t, i, !0), et(e, A(e, !1, r)), t = i = e.position) : e.position === e.lineStart && Be(e) ? b(e, "unexpected end of the document within a double quoted scalar") : (e.position++, i = e.position);
   }
   b(e, "unexpected end of the stream within a double quoted scalar");
 }
@@ -3904,7 +3903,7 @@ function pn(e) {
     }
     s !== 0 && Ze(e), Y.call(pt, i) ? pt[i](e, i, n) : Me(e, 'unknown document directive "' + i + '"');
   }
-  if (A(e, !0, -1), e.lineIndent === 0 && e.input.charCodeAt(e.position) === 45 && e.input.charCodeAt(e.position + 1) === 45 && e.input.charCodeAt(e.position + 2) === 45 ? (e.position += 3, A(e, !0, -1)) : o && b(e, "directives end mark is expected"), ge(e, e.lineIndent - 1, Ue, !1, !0), A(e, !0, -1), e.checkLineBreaks && Gi.test(e.input.slice(r, e.position)) && Me(e, "non-ASCII line breaks are interpreted as content"), e.documents.push(e.result), e.position === e.lineStart && Ve(e)) {
+  if (A(e, !0, -1), e.lineIndent === 0 && e.input.charCodeAt(e.position) === 45 && e.input.charCodeAt(e.position + 1) === 45 && e.input.charCodeAt(e.position + 2) === 45 ? (e.position += 3, A(e, !0, -1)) : o && b(e, "directives end mark is expected"), ge(e, e.lineIndent - 1, Ue, !1, !0), A(e, !0, -1), e.checkLineBreaks && Gi.test(e.input.slice(r, e.position)) && Me(e, "non-ASCII line breaks are interpreted as content"), e.documents.push(e.result), e.position === e.lineStart && Be(e)) {
     e.input.charCodeAt(e.position) === 46 && (e.position += 3, A(e, !0, -1));
     return;
   }
@@ -3933,7 +3932,7 @@ function hn(e, r) {
 }
 var fn = hn, mn = {
   load: fn
-}, Ht = Object.prototype.toString, jt = Object.prototype.hasOwnProperty, tt = 65279, bn = 9, xe = 10, gn = 13, vn = 32, wn = 33, xn = 34, Ge = 35, yn = 37, Cn = 38, _n = 39, Sn = 42, Vt = 44, kn = 45, De = 58, An = 61, En = 62, Ln = 63, On = 64, Bt = 91, qt = 93, Rn = 96, zt = 123, Tn = 124, Yt = 125, O = {};
+}, Ht = Object.prototype.toString, jt = Object.prototype.hasOwnProperty, tt = 65279, bn = 9, xe = 10, gn = 13, vn = 32, wn = 33, xn = 34, Ge = 35, yn = 37, Cn = 38, _n = 39, Sn = 42, Bt = 44, kn = 45, De = 58, An = 61, En = 62, Ln = 63, On = 64, Vt = 91, qt = 93, Rn = 96, zt = 123, Tn = 124, Yt = 125, O = {};
 O[0] = "\\0";
 O[7] = "\\a";
 O[8] = "\\b";
@@ -4024,11 +4023,11 @@ function bt(e, r, t) {
     (t ? (
       // c = flow-in
       i
-    ) : i && e !== Vt && e !== Bt && e !== qt && e !== zt && e !== Yt) && e !== Ge && !(r === De && !n) || mt(r) && !$e(r) && e === Ge || r === De && n
+    ) : i && e !== Bt && e !== Vt && e !== qt && e !== zt && e !== Yt) && e !== Ge && !(r === De && !n) || mt(r) && !$e(r) && e === Ge || r === De && n
   );
 }
 function $n(e) {
-  return Ce(e) && e !== tt && !$e(e) && e !== kn && e !== Ln && e !== De && e !== Vt && e !== Bt && e !== qt && e !== zt && e !== Yt && e !== Ge && e !== Cn && e !== Sn && e !== wn && e !== Tn && e !== An && e !== En && e !== _n && e !== xn && e !== yn && e !== On && e !== Rn;
+  return Ce(e) && e !== tt && !$e(e) && e !== kn && e !== Ln && e !== De && e !== Bt && e !== Vt && e !== qt && e !== zt && e !== Yt && e !== Ge && e !== Cn && e !== Sn && e !== wn && e !== Tn && e !== An && e !== En && e !== _n && e !== xn && e !== yn && e !== On && e !== Rn;
 }
 function Hn(e) {
   return !$e(e) && e !== De;
@@ -4063,7 +4062,7 @@ function jn(e, r, t, i, n, o, s, a) {
   }
   return !u && !f ? g && !s && !n(e) ? Gt : o === ye ? le : Je : t > 9 && Wt(e) ? le : s ? o === ye ? le : Je : f ? Jt : Kt;
 }
-function Vn(e, r, t, i, n) {
+function Bn(e, r, t, i, n) {
   e.dump = function() {
     if (r.length === 0)
       return e.quotingType === ye ? '""' : "''";
@@ -4090,7 +4089,7 @@ function Vn(e, r, t, i, n) {
       case Kt:
         return "|" + gt(r, e.indent) + vt(ft(r, o));
       case Jt:
-        return ">" + gt(r, e.indent) + vt(ft(Bn(r, s), o));
+        return ">" + gt(r, e.indent) + vt(ft(Vn(r, s), o));
       case le:
         return '"' + qn(r) + '"';
       default:
@@ -4110,7 +4109,7 @@ function vt(e) {
   return e[e.length - 1] === `
 ` ? e.slice(0, -1) : e;
 }
-function Bn(e, r) {
+function Vn(e, r) {
   for (var t = /(\n+)([^\n]*)/g, i = function() {
     var c = e.indexOf(`
 `);
@@ -4197,7 +4196,7 @@ function j(e, r, t, i, n, o, s) {
     else if (a === "[object Array]")
       i && e.dump.length !== 0 ? (e.noArrayIndent && !s && r > 0 ? xt(e, r - 1, e.dump, n) : xt(e, r, e.dump, n), f && (e.dump = "&ref_" + u + e.dump)) : (zn(e, r, e.dump), f && (e.dump = "&ref_" + u + " " + e.dump));
     else if (a === "[object String]")
-      e.tag !== "?" && Vn(e, e.dump, r, o, l);
+      e.tag !== "?" && Bn(e, e.dump, r, o, l);
     else {
       if (a === "[object Undefined]")
         return !1;
@@ -4490,7 +4489,7 @@ const N = class N {
 };
 G = new WeakMap(), K = new WeakMap(), x(N, G, "^LINK_TO^"), x(N, K, /* @__PURE__ */ new Map());
 let S = N;
-var J, Ae, V, P, Q, pe;
+var J, Ae, B, P, Q, pe;
 class Xt extends Te {
   constructor(t) {
     super();
@@ -4499,7 +4498,7 @@ class Xt extends Te {
     /** * @description 混淆链接 */
     x(this, Ae, "");
     /** * @description vps原始配置 */
-    x(this, V, {});
+    x(this, B, {});
     /** * @description 混淆配置 */
     x(this, P, {});
     /** * @description 原始备注 */
@@ -4513,14 +4512,14 @@ class Xt extends Te {
    * @param {string} v
    */
   setOriginConfig(t) {
-    w(this, J, t), w(this, V, new URL(t)), w(this, Q, p(this, V).hash ?? "");
+    w(this, J, t), w(this, B, new URL(t)), w(this, Q, p(this, B).hash ?? "");
   }
   /**
    * @description 更新原始配置
    * @param {string} ps
    */
   updateOriginConfig(t) {
-    p(this, V).hash = t, w(this, Q, t), w(this, J, p(this, V).href), this.setConfuseConfig(p(this, J));
+    p(this, B).hash = t, w(this, Q, t), w(this, J, p(this, B).href), this.setConfuseConfig(p(this, J));
   }
   /**
    * @description 设置混淆配置
@@ -4555,7 +4554,7 @@ class Xt extends Te {
    * @description 原始配置
    */
   get originConfig() {
-    return p(this, V);
+    return p(this, B);
   }
   /**
    * @description 混淆备注
@@ -4578,7 +4577,7 @@ class Xt extends Te {
     return p(this, P);
   }
 }
-J = new WeakMap(), Ae = new WeakMap(), V = new WeakMap(), P = new WeakMap(), Q = new WeakMap(), pe = new WeakMap();
+J = new WeakMap(), Ae = new WeakMap(), B = new WeakMap(), P = new WeakMap(), Q = new WeakMap(), pe = new WeakMap();
 var X, Ee, $, R, Z, de;
 class Zt extends Te {
   constructor(t) {
@@ -4700,7 +4699,7 @@ class Zt extends Te {
   }
 }
 X = new WeakMap(), Ee = new WeakMap(), $ = new WeakMap(), R = new WeakMap(), Z = new WeakMap(), de = new WeakMap();
-var ee, Le, B, F, te, he;
+var ee, Le, V, F, te, he;
 class er extends Te {
   constructor(t) {
     super();
@@ -4709,7 +4708,7 @@ class er extends Te {
     /** * @description 混淆链接 */
     x(this, Le, "");
     /** * @description vps原始配置 */
-    x(this, B, {});
+    x(this, V, {});
     /** * @description 混淆配置 */
     x(this, F, {});
     /** * @description 原始备注 */
@@ -4723,14 +4722,14 @@ class er extends Te {
    * @param {string} v
    */
   setOriginConfig(t) {
-    w(this, ee, t), w(this, B, new URL(t)), w(this, te, S.formatPs(p(this, B).hash) ?? "");
+    w(this, ee, t), w(this, V, new URL(t)), w(this, te, S.formatPs(p(this, V).hash) ?? "");
   }
   /**
    * @description 更新原始配置
    * @param {string} ps
    */
   updateOriginConfig(t) {
-    p(this, B).hash = S.formatPs(t), w(this, te, S.formatPs(t)), w(this, ee, p(this, B).href), this.setConfuseConfig(p(this, ee));
+    p(this, V).hash = S.formatPs(t), w(this, te, S.formatPs(t)), w(this, ee, p(this, V).href), this.setConfuseConfig(p(this, ee));
   }
   /**
    * @description 设置混淆配置
@@ -4765,7 +4764,7 @@ class er extends Te {
    * @description 原始配置
    */
   get originConfig() {
-    return p(this, B);
+    return p(this, V);
   }
   /**
    * @description 混淆备注
@@ -4788,7 +4787,7 @@ class er extends Te {
     return p(this, F);
   }
 }
-ee = new WeakMap(), Le = new WeakMap(), B = new WeakMap(), F = new WeakMap(), te = new WeakMap(), he = new WeakMap();
+ee = new WeakMap(), Le = new WeakMap(), V = new WeakMap(), F = new WeakMap(), te = new WeakMap(), he = new WeakMap();
 var re, Oe, q, U, ie, fe;
 class tr extends Te {
   constructor(t) {
