@@ -4548,7 +4548,7 @@ class sr extends Se {
   }
   restoreClash(t, n) {
     var i, o, s, a, l, c, d, p, h;
-    return t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(this.originConfig.port ?? 0), t.type === "hysteria2" && G(t, "password") && (t.password = ((o = (i = this.originConfig) == null ? void 0 : i.searchParams) == null ? void 0 : o.get("password")) ?? ""), G(t, "down") && (t.down = t.down !== "" ? t.down : ((s = this.originConfig.searchParams) == null ? void 0 : s.get("down")) ?? ((a = this.originConfig.searchParams) == null ? void 0 : a.get("downmbps")) ?? 0), G(t, "up") && (t.up = t.up !== "" ? t.up : ((l = this.originConfig.searchParams) == null ? void 0 : l.get("up")) ?? ((c = this.originConfig.searchParams) == null ? void 0 : c.get("upmbps")) ?? 0), G(t, "delay") && (t.delay = ((d = this.originConfig.searchParams) == null ? void 0 : d.get("delay")) ?? 0), (p = this.originConfig.searchParams) != null && p.has("sni") && (t.sni = ((h = this.originConfig.searchParams) == null ? void 0 : h.get("sni")) ?? ""), t;
+    return t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(this.originConfig.port ?? 0), t.type === "hysteria2" && G(t, "password") && (t.password = ((o = (i = this.originConfig) == null ? void 0 : i.searchParams) == null ? void 0 : o.get("password")) ?? ""), G(t, "down") && (t.down = t.down !== "" ? t.down : ((s = this.originConfig.searchParams) == null ? void 0 : s.get("down")) ?? ((a = this.originConfig.searchParams) == null ? void 0 : a.get("downmbps")) ?? 0, t.down = decodeURIComponent(t.down)), G(t, "up") && (t.up = t.up !== "" ? t.up : ((l = this.originConfig.searchParams) == null ? void 0 : l.get("up")) ?? ((c = this.originConfig.searchParams) == null ? void 0 : c.get("upmbps")) ?? 0, t.up = decodeURIComponent(t.up)), G(t, "delay") && (t.delay = ((d = this.originConfig.searchParams) == null ? void 0 : d.get("delay")) ?? 0), (p = this.originConfig.searchParams) != null && p.has("sni") && (t.sni = ((h = this.originConfig.searchParams) == null ? void 0 : h.get("sni")) ?? ""), t;
   }
   restoreSingbox(t, n) {
     var i, o;
@@ -5531,7 +5531,9 @@ class Lo {
     this.chunkCount = Number(r.CHUNK_COUNT ?? He.CHUNK_COUNT), this.backend = r.BACKEND ?? He.BACKEND, this.parser = null;
   }
   async setSubUrls(r) {
-    const { searchParams: t } = new URL(r.url), n = t.get("url"), i = t.get("protocol"), o = n.split(/\||\n/).filter(Boolean);
+    const { searchParams: t } = new URL(r.url), n = t.get("url"), i = t.get("protocol");
+    this.backend = t.get("backend") ?? this.backend;
+    const o = n.split(/\||\n/).filter(Boolean);
     this.parser = new fr(o, [], i), this.vps = o, await this.parser.parse(o);
     const s = co(Array.from(this.parser.urls), Number(this.chunkCount));
     this.urls = s.map((a) => {
