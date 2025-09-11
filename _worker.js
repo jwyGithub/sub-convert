@@ -376,6 +376,7 @@ function xr() {
                     .sub-checkbox__label {
                         font-size: 14px;
                         line-height: 14px;
+                        white-space: nowrap
                     }
 
                     .sub-checkbox:hover .sub-checkbox__input:not(.sub-checkbox__input_disabled) {
@@ -2219,9 +2220,11 @@ function Or() {
   return [
     { label: "Emoji", value: "emoji" },
     { label: "Clash New Field", value: "new_name" },
-    { label: "启用 UDP", value: "udp" },
+    { label: "UDP", value: "udp" },
     { label: "排序节点", value: "sort" },
-    { label: "启用TFO", value: "tfo" }
+    { label: "TFO", value: "tfo" },
+    { label: "关闭证书检查", value: "scv" },
+    { label: "节点类型", value: "append_type" }
   ];
 }
 function Rr(e, r) {
@@ -2650,7 +2653,7 @@ function $r(e, r) {
                             </sub-form-item>
 
                             <sub-form-item label="高级选项">
-                                <sub-checkbox key="advanced" span="5"></sub-checkbox>
+                                <sub-checkbox key="advanced" span="7"></sub-checkbox>
                             </sub-form-item>
 
                             <sub-form-item label="短链地址">
@@ -2755,7 +2758,7 @@ function $r(e, r) {
                             config: '${t[0].value}',
                             backend: '${l}',
                             protocol: '${JSON.stringify(a.map((h) => h.value))}',
-                            advanced: ['emoji', 'new_name'],
+                            advanced: ['emoji', 'new_name','scv'],
                             shortServe: '${((p = i[0]) == null ? void 0 : p.value) ?? ""}',
 
                             subUrl: '',
@@ -2823,11 +2826,9 @@ function $r(e, r) {
                                 const url = new URL(this.#model.backend + '/sub');
                                 url.searchParams.set('target', this.#model.target);
                                 url.searchParams.set('url', this.#model.url);
-                                url.searchParams.set('insert', 'false');
+                                url.searchParams.set('insert', 'true');
                                 url.searchParams.set('config', this.#model.config);
-                                url.searchParams.set('list', false);
-                                url.searchParams.set('scv', false);
-                                url.searchParams.set('fdn', false);
+                                url.searchParams.set('list', 'true');
                                 url.searchParams.set('protocol', Array.isArray(this.#model.protocol) ? JSON.stringify(this.#model.protocol) : this.#model.protocol);
                                 
                                 const advancedOptions = this.#getAdvancedOptions(this.#model);
