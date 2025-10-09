@@ -2222,12 +2222,13 @@ function Lr() {
 function Or() {
   return [
     { label: "Emoji", value: "emoji" },
-    { label: "Clash New Field", value: "new_name" },
+    { label: "Clash新字段", value: "new_name" },
     { label: "UDP", value: "udp" },
     { label: "排序节点", value: "sort" },
     { label: "TFO", value: "tfo" },
     { label: "关闭证书检查", value: "scv" },
-    { label: "节点类型", value: "append_type" }
+    { label: "节点类型", value: "append_type" },
+    { label: "仅输出节点信息", value: "list" }
   ];
 }
 function Rr(e, r) {
@@ -2656,7 +2657,7 @@ function $r(e, r) {
                             </sub-form-item>
 
                             <sub-form-item label="高级选项">
-                                <sub-checkbox key="advanced" span="7"></sub-checkbox>
+                                <sub-checkbox key="advanced" span="${s.length}"></sub-checkbox>
                             </sub-form-item>
 
                             <sub-form-item label="短链地址">
@@ -2831,7 +2832,6 @@ function $r(e, r) {
                                 url.searchParams.set('url', this.#model.url);
                                 url.searchParams.set('insert', 'true');
                                 url.searchParams.set('config', this.#model.config);
-                                url.searchParams.set('list', 'true');
                                 url.searchParams.set('protocol', Array.isArray(this.#model.protocol) ? JSON.stringify(this.#model.protocol) : this.#model.protocol);
                                 
                                 const advancedOptions = this.#getAdvancedOptions(this.#model);
