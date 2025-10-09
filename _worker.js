@@ -5010,7 +5010,7 @@ se = new WeakMap(), $e = new WeakMap(), W = new WeakMap(), $ = new WeakMap(), ae
     path: decodeURIComponent(((n = this.originConfig.searchParams) == null ? void 0 : n.get("path")) ?? "/"),
     headers: {
       ...t["ws-opts"].headers,
-      Host: this.originConfig.host
+      Host: this.originConfig.hostname
     }
   });
 };
@@ -5109,7 +5109,7 @@ ye = new WeakMap(), De = new WeakMap(), j = new WeakMap(), H = new WeakMap(), le
     path: this.originConfig.path,
     headers: {
       ...t["ws-opts"].headers,
-      Host: this.originConfig.host
+      Host: this.originConfig.add
     }
   });
 };
