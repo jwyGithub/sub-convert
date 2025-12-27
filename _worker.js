@@ -3,8 +3,8 @@ var ht = (e) => {
   throw TypeError(e);
 };
 var gr = (e, r, t) => r in e ? br(e, r, { enumerable: !0, configurable: !0, writable: !0, value: t }) : e[r] = t;
-var k = (e, r, t) => gr(e, typeof r != "symbol" ? r + "" : r, t), Ze = (e, r, t) => r.has(e) || ht("Cannot " + t);
-var u = (e, r, t) => (Ze(e, r, "read from private field"), t ? t.call(e) : r.get(e)), x = (e, r, t) => r.has(e) ? ht("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), v = (e, r, t, n) => (Ze(e, r, "write to private field"), n ? n.call(e, t) : r.set(e, t), t), et = (e, r, t) => (Ze(e, r, "access private method"), t);
+var k = (e, r, t) => gr(e, typeof r != "symbol" ? r + "" : r, t), Xe = (e, r, t) => r.has(e) || ht("Cannot " + t);
+var u = (e, r, t) => (Xe(e, r, "read from private field"), t ? t.call(e) : r.get(e)), x = (e, r, t) => r.has(e) ? ht("Cannot add the same private member more than once") : r instanceof WeakSet ? r.add(e) : r.set(e, t), v = (e, r, t, n) => (Xe(e, r, "write to private field"), n ? n.call(e, t) : r.set(e, t), t), Ze = (e, r, t) => (Xe(e, r, "access private method"), t);
 function Pt() {
   return [
     { label: "Clash", value: "clash" },
@@ -3006,7 +3006,7 @@ Ee.prototype.toString = function(r) {
   return this.name + ": " + Mt(this, r);
 };
 var I = Ee;
-function tt(e, r, t, n, i) {
+function et(e, r, t, n, i) {
   var o = "", s = "", a = Math.floor(i / 2) - 1;
   return n - r > a && (o = " ... ", r = n - a + o.length), t - n > a && (s = " ...", t = n + a - s.length), {
     str: o + e.slice(r, t).replace(/\t/g, "→") + s,
@@ -3014,7 +3014,7 @@ function tt(e, r, t, n, i) {
     // relative position
   };
 }
-function rt(e, r) {
+function tt(e, r) {
   return E.repeat(" ", r - e.length) + e;
 }
 function Qr(e, r) {
@@ -3025,24 +3025,24 @@ function Qr(e, r) {
   s < 0 && (s = n.length - 1);
   var a = "", l, c, d = Math.min(e.line + r.linesAfter, i.length).toString().length, p = r.maxLength - (r.indent + d + 3);
   for (l = 1; l <= r.linesBefore && !(s - l < 0); l++)
-    c = tt(
+    c = et(
       e.buffer,
       n[s - l],
       i[s - l],
       e.position - (n[s] - n[s - l]),
       p
-    ), a = E.repeat(" ", r.indent) + rt((e.line - l + 1).toString(), d) + " | " + c.str + `
+    ), a = E.repeat(" ", r.indent) + tt((e.line - l + 1).toString(), d) + " | " + c.str + `
 ` + a;
-  for (c = tt(e.buffer, n[s], i[s], e.position, p), a += E.repeat(" ", r.indent) + rt((e.line + 1).toString(), d) + " | " + c.str + `
+  for (c = et(e.buffer, n[s], i[s], e.position, p), a += E.repeat(" ", r.indent) + tt((e.line + 1).toString(), d) + " | " + c.str + `
 `, a += E.repeat("-", r.indent + d + 3 + c.pos) + `^
 `, l = 1; l <= r.linesAfter && !(s + l >= i.length); l++)
-    c = tt(
+    c = et(
       e.buffer,
       n[s + l],
       i[s + l],
       e.position - (n[s] - n[s + l]),
       p
-    ), a += E.repeat(" ", r.indent) + rt((e.line + l + 1).toString(), d) + " | " + c.str + `
+    ), a += E.repeat(" ", r.indent) + tt((e.line + l + 1).toString(), d) + " | " + c.str + `
 `;
   return a.replace(/\n$/, "");
 }
@@ -3111,10 +3111,10 @@ function ii() {
     arguments[r].forEach(n);
   return e;
 }
-function nt(e) {
+function it(e) {
   return this.extend(e);
 }
-nt.prototype.extend = function(r) {
+it.prototype.extend = function(r) {
   var t = [], n = [];
   if (r instanceof R)
     n.push(r);
@@ -3135,10 +3135,10 @@ nt.prototype.extend = function(r) {
     if (!(o instanceof R))
       throw new I("Specified list of YAML types (or a single Type object) contains a non-Type object.");
   });
-  var i = Object.create(nt.prototype);
+  var i = Object.create(it.prototype);
   return i.implicit = (this.implicit || []).concat(t), i.explicit = (this.explicit || []).concat(n), i.compiledImplicit = mt(i, "implicit"), i.compiledExplicit = mt(i, "explicit"), i.compiledTypeMap = ii(i.compiledImplicit, i.compiledExplicit), i;
 };
-var ni = nt, oi = new R("tag:yaml.org,2002:str", {
+var ni = it, oi = new R("tag:yaml.org,2002:str", {
   kind: "scalar",
   construct: function(e) {
     return e !== null ? e : "";
@@ -3413,11 +3413,11 @@ function Mi(e) {
 var $i = new R("tag:yaml.org,2002:merge", {
   kind: "scalar",
   resolve: Mi
-}), ct = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=
+}), lt = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=
 \r`;
 function Di(e) {
   if (e === null) return !1;
-  var r, t, n = 0, i = e.length, o = ct;
+  var r, t, n = 0, i = e.length, o = lt;
   for (t = 0; t < i; t++)
     if (r = o.indexOf(e.charAt(t)), !(r > 64)) {
       if (r < 0) return !1;
@@ -3426,13 +3426,13 @@ function Di(e) {
   return n % 8 === 0;
 }
 function Hi(e) {
-  var r, t, n = e.replace(/[\r\n=]/g, ""), i = n.length, o = ct, s = 0, a = [];
+  var r, t, n = e.replace(/[\r\n=]/g, ""), i = n.length, o = lt, s = 0, a = [];
   for (r = 0; r < i; r++)
     r % 4 === 0 && r && (a.push(s >> 16 & 255), a.push(s >> 8 & 255), a.push(s & 255)), s = s << 6 | o.indexOf(n.charAt(r));
   return t = i % 4 * 6, t === 0 ? (a.push(s >> 16 & 255), a.push(s >> 8 & 255), a.push(s & 255)) : t === 18 ? (a.push(s >> 10 & 255), a.push(s >> 2 & 255)) : t === 12 && a.push(s >> 4 & 255), new Uint8Array(a);
 }
 function Vi(e) {
-  var r = "", t = 0, n, i, o = e.length, s = ct;
+  var r = "", t = 0, n, i, o = e.length, s = lt;
   for (n = 0; n < o; n++)
     n % 3 === 0 && n && (r += s[t >> 18 & 63], r += s[t >> 12 & 63], r += s[t >> 6 & 63], r += s[t & 63]), t = (t << 8) + e[n];
   return i = o % 3, i === 0 ? (r += s[t >> 18 & 63], r += s[t >> 12 & 63], r += s[t >> 6 & 63], r += s[t & 63]) : i === 2 ? (r += s[t >> 10 & 63], r += s[t >> 4 & 63], r += s[t << 2 & 63], r += s[64]) : i === 1 && (r += s[t >> 2 & 63], r += s[t << 4 & 63], r += s[64], r += s[64]), r;
@@ -3517,7 +3517,7 @@ var rn = new R("tag:yaml.org,2002:set", {
     Xi,
     rn
   ]
-}), J = Object.prototype.hasOwnProperty, je = 1, Vt = 2, Bt = 3, qe = 4, it = 1, nn = 2, bt = 3, on = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/, sn = /[\x85\u2028\u2029]/, an = /[,\[\]\{\}]/, jt = /^(?:!|!!|![a-z\-]+!)$/i, qt = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i;
+}), J = Object.prototype.hasOwnProperty, je = 1, Vt = 2, Bt = 3, qe = 4, rt = 1, nn = 2, bt = 3, on = /[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/, sn = /[\x85\u2028\u2029]/, an = /[,\[\]\{\}]/, jt = /^(?:!|!!|![a-z\-]+!)$/i, qt = /^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i;
 function gt(e) {
   return Object.prototype.toString.call(e);
 }
@@ -3630,7 +3630,7 @@ function fe(e, r, t, n, i, o, s, a, l) {
     !e.json && !J.call(t, i) && J.call(r, i) && (e.line = s || e.line, e.lineStart = a || e.lineStart, e.position = l || e.position, b(e, "duplicated mapping key")), zt(r, i, o), delete t[i];
   return r;
 }
-function ut(e) {
+function ct(e) {
   var r;
   r = e.input.charCodeAt(e.position), r === 10 ? e.position++ : r === 13 ? (e.position++, e.input.charCodeAt(e.position) === 10 && e.position++) : b(e, "a line break is expected"), e.line += 1, e.lineStart = e.position, e.firstTabInLine = -1;
 }
@@ -3643,18 +3643,18 @@ function A(e, r, t) {
         i = e.input.charCodeAt(++e.position);
       while (i !== 10 && i !== 13 && i !== 0);
     if (V(i))
-      for (ut(e), i = e.input.charCodeAt(e.position), n++, e.lineIndent = 0; i === 32; )
+      for (ct(e), i = e.input.charCodeAt(e.position), n++, e.lineIndent = 0; i === 32; )
         e.lineIndent++, i = e.input.charCodeAt(++e.position);
     else
       break;
   }
   return t !== -1 && n !== 0 && e.lineIndent < t && ze(e, "deficient indentation"), n;
 }
-function Xe(e) {
+function Qe(e) {
   var r = e.position, t;
   return t = e.input.charCodeAt(r), !!((t === 45 || t === 46) && t === e.input.charCodeAt(r + 1) && t === e.input.charCodeAt(r + 2) && (r += 3, t = e.input.charCodeAt(r), t === 0 || P(t)));
 }
-function pt(e, r) {
+function ut(e, r) {
   r === 1 ? e.result += " " : r > 1 && (e.result += E.repeat(`
 `, r - 1));
 }
@@ -3670,7 +3670,7 @@ function hn(e, r, t) {
       if (n = e.input.charCodeAt(e.position - 1), P(n))
         break;
     } else {
-      if (e.position === e.lineStart && Xe(e) || t && he(f))
+      if (e.position === e.lineStart && Qe(e) || t && he(f))
         break;
       if (V(f))
         if (l = e.line, c = e.lineStart, d = e.lineIndent, A(e, !1, -1), e.lineIndent >= r) {
@@ -3681,7 +3681,7 @@ function hn(e, r, t) {
           break;
         }
     }
-    a && (K(e, o, s, !1), pt(e, e.line - l), o = s = e.position, a = !1), ce(f) || (s = e.position + 1), f = e.input.charCodeAt(++e.position);
+    a && (K(e, o, s, !1), ut(e, e.line - l), o = s = e.position, a = !1), ce(f) || (s = e.position + 1), f = e.input.charCodeAt(++e.position);
   }
   return K(e, o, s, !1), e.result ? !0 : (e.kind = p, e.result = h, !1);
 }
@@ -3695,7 +3695,7 @@ function fn(e, r) {
         n = e.position, e.position++, i = e.position;
       else
         return !0;
-    else V(t) ? (K(e, n, i, !0), pt(e, A(e, !1, r)), n = i = e.position) : e.position === e.lineStart && Xe(e) ? b(e, "unexpected end of the document within a single quoted scalar") : (e.position++, i = e.position);
+    else V(t) ? (K(e, n, i, !0), ut(e, A(e, !1, r)), n = i = e.position) : e.position === e.lineStart && Qe(e) ? b(e, "unexpected end of the document within a single quoted scalar") : (e.position++, i = e.position);
   b(e, "unexpected end of the stream within a single quoted scalar");
 }
 function mn(e, r) {
@@ -3717,7 +3717,7 @@ function mn(e, r) {
       } else
         b(e, "unknown escape sequence");
       t = n = e.position;
-    } else V(a) ? (K(e, t, n, !0), pt(e, A(e, !1, r)), t = n = e.position) : e.position === e.lineStart && Xe(e) ? b(e, "unexpected end of the document within a double quoted scalar") : (e.position++, n = e.position);
+    } else V(a) ? (K(e, t, n, !0), ut(e, A(e, !1, r)), t = n = e.position) : e.position === e.lineStart && Qe(e) ? b(e, "unexpected end of the document within a double quoted scalar") : (e.position++, n = e.position);
   }
   b(e, "unexpected end of the stream within a double quoted scalar");
 }
@@ -3737,7 +3737,7 @@ function bn(e, r) {
   b(e, "unexpected end of the stream within a flow collection");
 }
 function gn(e, r) {
-  var t, n, i = it, o = !1, s = !1, a = r, l = 0, c = !1, d, p;
+  var t, n, i = rt, o = !1, s = !1, a = r, l = 0, c = !1, d, p;
   if (p = e.input.charCodeAt(e.position), p === 124)
     n = !1;
   else if (p === 62)
@@ -3746,7 +3746,7 @@ function gn(e, r) {
     return !1;
   for (e.kind = "scalar", e.result = ""; p !== 0; )
     if (p = e.input.charCodeAt(++e.position), p === 43 || p === 45)
-      it === i ? i = p === 43 ? bt : nn : b(e, "repeat of a chomping mode identifier");
+      rt === i ? i = p === 43 ? bt : nn : b(e, "repeat of a chomping mode identifier");
     else if ((d = un(p)) >= 0)
       d === 0 ? b(e, "bad explicit indentation width of a block scalar; it cannot be less than one") : s ? b(e, "repeat of an indentation width identifier") : (a = r + d - 1, s = !0);
     else
@@ -3761,7 +3761,7 @@ function gn(e, r) {
       while (!V(p) && p !== 0);
   }
   for (; p !== 0; ) {
-    for (ut(e), e.lineIndent = 0, p = e.input.charCodeAt(e.position); (!s || e.lineIndent < a) && p === 32; )
+    for (ct(e), e.lineIndent = 0, p = e.input.charCodeAt(e.position); (!s || e.lineIndent < a) && p === 32; )
       e.lineIndent++, p = e.input.charCodeAt(++e.position);
     if (!s && e.lineIndent > a && (a = e.lineIndent), V(p)) {
       l++;
@@ -3769,7 +3769,7 @@ function gn(e, r) {
     }
     if (e.lineIndent < a) {
       i === bt ? e.result += E.repeat(`
-`, o ? 1 + l : l) : i === it && o && (e.result += `
+`, o ? 1 + l : l) : i === rt && o && (e.result += `
 `);
       break;
     }
@@ -3908,9 +3908,9 @@ function Cn(e) {
         s = e.input.charCodeAt(++e.position);
       i.push(e.input.slice(t, e.position));
     }
-    s !== 0 && ut(e), J.call(wt, n) ? wt[n](e, n, i) : ze(e, 'unknown document directive "' + n + '"');
+    s !== 0 && ct(e), J.call(wt, n) ? wt[n](e, n, i) : ze(e, 'unknown document directive "' + n + '"');
   }
-  if (A(e, !0, -1), e.lineIndent === 0 && e.input.charCodeAt(e.position) === 45 && e.input.charCodeAt(e.position + 1) === 45 && e.input.charCodeAt(e.position + 2) === 45 ? (e.position += 3, A(e, !0, -1)) : o && b(e, "directives end mark is expected"), _e(e, e.lineIndent - 1, qe, !1, !0), A(e, !0, -1), e.checkLineBreaks && sn.test(e.input.slice(r, e.position)) && ze(e, "non-ASCII line breaks are interpreted as content"), e.documents.push(e.result), e.position === e.lineStart && Xe(e)) {
+  if (A(e, !0, -1), e.lineIndent === 0 && e.input.charCodeAt(e.position) === 45 && e.input.charCodeAt(e.position + 1) === 45 && e.input.charCodeAt(e.position + 2) === 45 ? (e.position += 3, A(e, !0, -1)) : o && b(e, "directives end mark is expected"), _e(e, e.lineIndent - 1, qe, !1, !0), A(e, !0, -1), e.checkLineBreaks && sn.test(e.input.slice(r, e.position)) && ze(e, "non-ASCII line breaks are interpreted as content"), e.documents.push(e.result), e.position === e.lineStart && Qe(e)) {
     e.input.charCodeAt(e.position) === 46 && (e.position += 3, A(e, !0, -1));
     return;
   }
@@ -3939,7 +3939,7 @@ function Sn(e, r) {
 }
 var kn = Sn, An = {
   load: kn
-}, Kt = Object.prototype.toString, Jt = Object.prototype.hasOwnProperty, dt = 65279, En = 9, Le = 10, Ln = 13, On = 32, Rn = 33, Tn = 34, ot = 35, Nn = 37, In = 38, Pn = 39, Fn = 42, Qt = 44, Un = 45, Ye = 58, Mn = 61, $n = 62, Dn = 63, Hn = 64, Xt = 91, Zt = 93, Vn = 96, er = 123, Bn = 124, tr = 125, T = {};
+}, Kt = Object.prototype.toString, Jt = Object.prototype.hasOwnProperty, pt = 65279, En = 9, Le = 10, Ln = 13, On = 32, Rn = 33, Tn = 34, nt = 35, Nn = 37, In = 38, Pn = 39, Fn = 42, Qt = 44, Un = 45, Ye = 58, Mn = 61, $n = 62, Dn = 63, Hn = 64, Xt = 91, Zt = 93, Vn = 96, er = 123, Bn = 124, tr = 125, T = {};
 T[0] = "\\0";
 T[7] = "\\a";
 T[8] = "\\b";
@@ -4003,7 +4003,7 @@ function Ct(e, r) {
 ` && (o += t), o += s;
   return o;
 }
-function st(e, r) {
+function ot(e, r) {
   return `
 ` + E.repeat(" ", e.indent * r);
 }
@@ -4018,10 +4018,10 @@ function We(e) {
   return e === On || e === En;
 }
 function Re(e) {
-  return 32 <= e && e <= 126 || 161 <= e && e <= 55295 && e !== 8232 && e !== 8233 || 57344 <= e && e <= 65533 && e !== dt || 65536 <= e && e <= 1114111;
+  return 32 <= e && e <= 126 || 161 <= e && e <= 55295 && e !== 8232 && e !== 8233 || 57344 <= e && e <= 65533 && e !== pt || 65536 <= e && e <= 1114111;
 }
 function _t(e) {
-  return Re(e) && e !== dt && e !== Ln && e !== Le;
+  return Re(e) && e !== pt && e !== Ln && e !== Le;
 }
 function St(e, r, t) {
   var n = _t(e), i = n && !We(e);
@@ -4030,11 +4030,11 @@ function St(e, r, t) {
     (t ? (
       // c = flow-in
       n
-    ) : n && e !== Qt && e !== Xt && e !== Zt && e !== er && e !== tr) && e !== ot && !(r === Ye && !i) || _t(r) && !We(r) && e === ot || r === Ye && i
+    ) : n && e !== Qt && e !== Xt && e !== Zt && e !== er && e !== tr) && e !== nt && !(r === Ye && !i) || _t(r) && !We(r) && e === nt || r === Ye && i
   );
 }
 function Jn(e) {
-  return Re(e) && e !== dt && !We(e) && e !== Un && e !== Dn && e !== Ye && e !== Qt && e !== Xt && e !== Zt && e !== er && e !== tr && e !== ot && e !== In && e !== Fn && e !== Rn && e !== Bn && e !== Mn && e !== $n && e !== Pn && e !== Tn && e !== Nn && e !== Hn && e !== Vn;
+  return Re(e) && e !== pt && !We(e) && e !== Un && e !== Dn && e !== Ye && e !== Qt && e !== Xt && e !== Zt && e !== er && e !== tr && e !== nt && e !== In && e !== Fn && e !== Rn && e !== Bn && e !== Mn && e !== $n && e !== Pn && e !== Tn && e !== Nn && e !== Hn && e !== Vn;
 }
 function Qn(e) {
   return !We(e) && e !== Ye;
@@ -4047,7 +4047,7 @@ function rr(e) {
   var r = /^\n* /;
   return r.test(e);
 }
-var ir = 1, at = 2, nr = 3, or = 4, de = 5;
+var ir = 1, st = 2, nr = 3, or = 4, de = 5;
 function Xn(e, r, t, n, i, o, s, a) {
   var l, c = 0, d = null, p = !1, h = !1, f = n !== -1, m = -1, g = Jn(ke(e, 0)) && Qn(ke(e, e.length - 1));
   if (r || s)
@@ -4067,7 +4067,7 @@ function Xn(e, r, t, n, i, o, s, a) {
     }
     h = h || f && l - m - 1 > n && e[m + 1] !== " ";
   }
-  return !p && !h ? g && !s && !i(e) ? ir : o === Oe ? de : at : t > 9 && rr(e) ? de : s ? o === Oe ? de : at : h ? or : nr;
+  return !p && !h ? g && !s && !i(e) ? ir : o === Oe ? de : st : t > 9 && rr(e) ? de : s ? o === Oe ? de : st : h ? or : nr;
 }
 function Zn(e, r, t, n, i) {
   e.dump = (function() {
@@ -4091,7 +4091,7 @@ function Zn(e, r, t, n, i) {
     )) {
       case ir:
         return r;
-      case at:
+      case st:
         return "'" + r.replace(/'/g, "''") + "'";
       case nr:
         return "|" + kt(r, e.indent) + At(Ct(r, o));
@@ -4152,7 +4152,7 @@ function ro(e, r, t) {
 function Lt(e, r, t, n) {
   var i = "", o = e.tag, s, a, l;
   for (s = 0, a = t.length; s < a; s += 1)
-    l = t[s], e.replacer && (l = e.replacer.call(t, String(s), l)), (q(e, r + 1, l, !0, !0, !1, !0) || typeof l > "u" && q(e, r + 1, null, !0, !0, !1, !0)) && ((!n || i !== "") && (i += st(e, r)), e.dump && Le === e.dump.charCodeAt(0) ? i += "-" : i += "- ", i += e.dump);
+    l = t[s], e.replacer && (l = e.replacer.call(t, String(s), l)), (q(e, r + 1, l, !0, !0, !1, !0) || typeof l > "u" && q(e, r + 1, null, !0, !0, !1, !0)) && ((!n || i !== "") && (i += ot(e, r)), e.dump && Le === e.dump.charCodeAt(0) ? i += "-" : i += "- ", i += e.dump);
   e.tag = o, e.dump = i || "[]";
 }
 function io(e, r, t) {
@@ -4170,7 +4170,7 @@ function no(e, r, t, n) {
   else if (e.sortKeys)
     throw new I("sortKeys must be a boolean or a function");
   for (a = 0, l = s.length; a < l; a += 1)
-    h = "", (!n || i !== "") && (h += st(e, r)), c = s[a], d = t[c], e.replacer && (d = e.replacer.call(t, c, d)), q(e, r + 1, c, !0, !0, !0) && (p = e.tag !== null && e.tag !== "?" || e.dump && e.dump.length > 1024, p && (e.dump && Le === e.dump.charCodeAt(0) ? h += "?" : h += "? "), h += e.dump, p && (h += st(e, r)), q(e, r + 1, d, !0, p) && (e.dump && Le === e.dump.charCodeAt(0) ? h += ":" : h += ": ", h += e.dump, i += h));
+    h = "", (!n || i !== "") && (h += ot(e, r)), c = s[a], d = t[c], e.replacer && (d = e.replacer.call(t, c, d)), q(e, r + 1, c, !0, !0, !0) && (p = e.tag !== null && e.tag !== "?" || e.dump && e.dump.length > 1024, p && (e.dump && Le === e.dump.charCodeAt(0) ? h += "?" : h += "? "), h += e.dump, p && (h += ot(e, r)), q(e, r + 1, d, !0, p) && (e.dump && Le === e.dump.charCodeAt(0) ? h += ":" : h += ": ", h += e.dump, i += h));
   e.tag = o, e.dump = i || "{}";
 }
 function Ot(e, r, t) {
@@ -4218,21 +4218,21 @@ function q(e, r, t, n, i, o, s) {
 }
 function oo(e, r) {
   var t = [], n = [], i, o;
-  for (lt(e, t, n), i = 0, o = n.length; i < o; i += 1)
+  for (at(e, t, n), i = 0, o = n.length; i < o; i += 1)
     r.duplicates.push(t[n[i]]);
   r.usedDuplicates = new Array(o);
 }
-function lt(e, r, t) {
+function at(e, r, t) {
   var n, i, o;
   if (e !== null && typeof e == "object")
     if (i = r.indexOf(e), i !== -1)
       t.indexOf(i) === -1 && t.push(i);
     else if (r.push(e), Array.isArray(e))
       for (i = 0, o = e.length; i < o; i += 1)
-        lt(e[i], r, t);
+        at(e[i], r, t);
     else
       for (n = Object.keys(e), i = 0, o = n.length; i < o; i += 1)
-        lt(e[n[i]], r, t);
+        at(e[n[i]], r, t);
 }
 function so(e, r) {
   r = r || {};
@@ -4296,7 +4296,7 @@ function ho(e) {
     }, e);
   });
 }
-async function Ge(e, r = {}) {
+async function dt(e, r = {}) {
   const t = {
     ...Rt,
     ...r,
@@ -4411,13 +4411,13 @@ class go extends bo {
     super(r);
   }
 }
-var Te, Ne, Ie, Ke;
+var Te, Ne, Ie, Ge;
 class Se {
   constructor() {
     x(this, Te, ["localhost", "127.0.0.1", "abc.cba.com"]);
     x(this, Ne, ["AES_256_GCM", "CHACHA20_POLY1305", "AES_128_GCM", "CHACHA20_IETF"]);
     x(this, Ie, 1024);
-    x(this, Ke, 65535);
+    x(this, Ge, 65535);
   }
   /**
    * @description 获取随机uuid
@@ -4455,7 +4455,7 @@ class Se {
    * @returns {string} port
    */
   getPort() {
-    return Math.floor(Math.random() * (u(this, Ke) - u(this, Ie) + 1) + u(this, Ie)).toString();
+    return Math.floor(Math.random() * (u(this, Ge) - u(this, Ie) + 1) + u(this, Ie)).toString();
   }
   /**
    * @description 获取随机 SS协议的加密类型
@@ -4464,7 +4464,7 @@ class Se {
     return u(this, Ne)[Math.floor(Math.random() * u(this, Ne).length)];
   }
 }
-Te = new WeakMap(), Ne = new WeakMap(), Ie = new WeakMap(), Ke = new WeakMap();
+Te = new WeakMap(), Ne = new WeakMap(), Ie = new WeakMap(), Ge = new WeakMap();
 var Q, X;
 const F = class F {
   /**
@@ -4917,11 +4917,11 @@ class ur extends Se {
   }
 }
 ne = new WeakMap(), Me = new WeakMap(), Y = new WeakMap(), M = new WeakMap(), oe = new WeakMap(), we = new WeakMap();
-var se, $e, W, $, ae, xe, Je, dr;
+var se, $e, W, $, ae, xe, Ke, dr;
 class pr extends Se {
   constructor(t) {
     super();
-    x(this, Je);
+    x(this, Ke);
     /** * @description 原始链接 */
     x(this, se, "");
     /** * @description 混淆链接 */
@@ -4959,7 +4959,7 @@ class pr extends Se {
   }
   restoreClash(t, n) {
     var i, o;
-    return et(this, Je, dr).call(this, t), t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = this.originConfig.username ?? "", t.alpn = t.alpn ? (o = t.alpn) == null ? void 0 : o.map((s) => decodeURIComponent(s)) : t.alpn, t;
+    return Ze(this, Ke, dr).call(this, t), t.name = n, t.server = this.originConfig.hostname ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = this.originConfig.username ?? "", t.alpn = t.alpn ? (o = t.alpn) == null ? void 0 : o.map((s) => decodeURIComponent(s)) : t.alpn, t;
   }
   restoreSingbox(t, n) {
     var i, o;
@@ -5006,7 +5006,7 @@ class pr extends Se {
     return u(this, $);
   }
 }
-se = new WeakMap(), $e = new WeakMap(), W = new WeakMap(), $ = new WeakMap(), ae = new WeakMap(), xe = new WeakMap(), Je = new WeakSet(), dr = function(t) {
+se = new WeakMap(), $e = new WeakMap(), W = new WeakMap(), $ = new WeakMap(), ae = new WeakMap(), xe = new WeakMap(), Ke = new WeakSet(), dr = function(t) {
   var n;
   t.network === "ws" && (t["ws-opts"] = {
     ...t["ws-opts"],
@@ -5017,11 +5017,11 @@ se = new WeakMap(), $e = new WeakMap(), W = new WeakMap(), $ = new WeakMap(), ae
     }
   });
 };
-var ye, De, j, H, le, Ce, Qe, fr;
+var ye, De, j, H, le, Ce, Je, fr;
 class hr extends Se {
   constructor(t) {
     super();
-    x(this, Qe);
+    x(this, Je);
     /** * @description 原始链接 */
     x(this, ye, "");
     /** * @description 混淆链接 */
@@ -5059,7 +5059,7 @@ class hr extends Se {
   }
   restoreClash(t, n) {
     var i, o;
-    return et(this, Qe, fr).call(this, t), t.name = n, t.server = this.originConfig.add ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = ((o = this.originConfig) == null ? void 0 : o.id) ?? "", t;
+    return Ze(this, Je, fr).call(this, t), t.name = n, t.server = this.originConfig.add ?? "", t.port = Number(((i = this.originConfig) == null ? void 0 : i.port) ?? 0), t.uuid = ((o = this.originConfig) == null ? void 0 : o.id) ?? "", t;
   }
   restoreSingbox(t, n) {
     var i, o;
@@ -5106,7 +5106,7 @@ class hr extends Se {
     return u(this, H);
   }
 }
-ye = new WeakMap(), De = new WeakMap(), j = new WeakMap(), H = new WeakMap(), le = new WeakMap(), Ce = new WeakMap(), Qe = new WeakSet(), fr = function(t) {
+ye = new WeakMap(), De = new WeakMap(), j = new WeakMap(), H = new WeakMap(), le = new WeakMap(), Ce = new WeakMap(), Je = new WeakSet(), fr = function(t) {
   t.network === "ws" && (t["ws-opts"] = {
     ...t["ws-opts"],
     path: this.originConfig.path,
@@ -5342,13 +5342,7 @@ class mr extends go {
           i.startsWith("vless://") && this.hasProtocol("vless") ? o = new pr(i) : i.startsWith("vmess://") && this.hasProtocol("vmess") ? o = new hr(i) : i.startsWith("trojan://") && this.hasProtocol("trojan") ? o = new ur(i) : i.startsWith("ss://") && this.hasProtocol("shadowsocks") ? o = new lr(i) : i.startsWith("ssr://") && this.hasProtocol("shadowsocksr") ? o = new cr(i) : this.isHysteria2(i) && this.hasProtocol("hysteria", "hysteria2", "hy2") && (o = new ar(i)), o && this.setStore(i, o);
         }
         if (n.startsWith("https://") || n.startsWith("http://")) {
-          const o = await Ge(n, { retries: 3, redirect: "manual" }).then(async (l) => {
-            if (l.status === 302) {
-              const { origin: c } = new URL(n), d = l.headers.Location;
-              return (await Ge(`${c}${d}`)).data.text();
-            }
-            return l.data.text();
-          }), { subType: s, content: a } = this.getSubType(o);
+          const o = await dt(n, { retries: 3 }).then(async (l) => l.data.text()), { subType: s, content: a } = this.getSubType(o);
           if (s === "base64" && a && (this.updateExist(Array.from(this.originUrls)), await this.parse(a.split(`
 `).filter(Boolean))), s === "yaml" && a) {
             const l = a.proxies;
@@ -5413,7 +5407,7 @@ class mr extends go {
 let Ao = class {
   async getConfig(r) {
     try {
-      const n = (await Promise.all(r.map((i) => Ge(i, { retries: 3 }).then((o) => o.data.text())))).map((i) => sr(i));
+      const n = (await Promise.all(r.map((i) => dt(i, { retries: 3 }).then((o) => o.data.text())))).map((i) => sr(i));
       return this.mergeClashConfig(n);
     } catch (t) {
       throw new Error(`Failed to get clash config: ${t.message || t}`);
@@ -5470,7 +5464,7 @@ let Ao = class {
 }, Eo = class {
   async getConfig(r) {
     try {
-      const n = (await Promise.all(r.map((i) => Ge(i, { retries: 3 }).then((o) => o.data.text())))).filter((i) => po(i)).map((i) => JSON.parse(i));
+      const n = (await Promise.all(r.map((i) => dt(i, { retries: 3 }).then((o) => o.data.text())))).filter((i) => po(i)).map((i) => JSON.parse(i));
       return this.mergeConfig(n);
     } catch (t) {
       throw new Error(`Failed to get singbox config: ${t.message || t}`);
