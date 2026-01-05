@@ -12,8 +12,6 @@ interface Env {
     LOCK_BACKEND?: boolean;
     // 远程配置
     REMOTE_CONFIG?: string;
-    // 分块数量
-    CHUNK_COUNT?: string;
     // 数据库
     DB?: D1Database;
 }
