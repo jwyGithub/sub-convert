@@ -15,7 +15,7 @@ export class UrlService {
 
             const restore = new Restore(confuse);
             if (['clash', 'clashr'].includes(convertType)) {
-                const originConfig = await restore.getClashConfig();
+                const originConfig = await restore.getClashConfig(request);
                 return new Response(dump(originConfig, { indent: 2, lineWidth: 200 }), {
                     headers: new Headers({
                         'Content-Type': 'text/yaml; charset=UTF-8',
@@ -25,7 +25,7 @@ export class UrlService {
             }
 
             if (convertType === 'singbox') {
-                const originConfig = await restore.getSingboxConfig();
+                const originConfig = await restore.getSingboxConfig(request);
                 return new Response(JSON.stringify(originConfig), {
                     headers: new Headers({
                         'Content-Type': 'text/plain; charset=UTF-8',
@@ -48,6 +48,16 @@ export class UrlService {
         } catch (error: any) {
             throw new Error(error.message || 'Invalid request');
         }
+    }
+
+    async forward(request: Request, env: Env): Promise<Response> {
+        const urls = request.headers.get('x-forward-urls') || '';
+        const backend = request.headers.get('x-forward-backend') || env.BACKEND || DEFAULT_CONFIG.BACKEND;
+        const search = request.headers.get('x-forward-search');
+        const confuseUrl = new URL(`${backend}/sub?${search}`);
+        confuseUrl.searchParams.set('url', urls);
+        const originUrl = confuseUrl.toString();
+        return Response.redirect(originUrl, 302);
     }
 
     async getVersion(request: Request, env: Env): Promise<Response> {

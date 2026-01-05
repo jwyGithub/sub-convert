@@ -9,14 +9,14 @@ export class Restore {
         this.confuse = confuse;
     }
 
-    public async getClashConfig(): Promise<ClashType> {
-        const clashConfuseConfig = await this.confuse.getClashConfig();
+    public async getClashConfig(request: Request): Promise<ClashType> {
+        const clashConfuseConfig = await this.confuse.getClashConfig(request);
         const clashClient = new ClashClient(clashConfuseConfig);
         return clashClient.getOriginConfig(this.confuse.vpsStore!);
     }
 
-    public async getSingboxConfig(): Promise<SingboxType> {
-        const singboxConfuseConfig = await this.confuse.getSingboxConfig();
+    public async getSingboxConfig(request: Request): Promise<SingboxType> {
+        const singboxConfuseConfig = await this.confuse.getSingboxConfig(request);
         const singboxClient = new SingboxClient(singboxConfuseConfig);
         return singboxClient.getOriginConfig(this.confuse.vpsStore!);
     }

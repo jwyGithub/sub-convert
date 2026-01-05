@@ -26,6 +26,10 @@ export class UrlController {
         }
     }
 
+    async forward(request: Request, env: Env): Promise<Response> {
+        return this.service.forward(request, env);
+    }
+
     async getVersion(request: Request, env: Env): Promise<Response> {
         return this.service.getVersion(request, env);
     }

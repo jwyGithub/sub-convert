@@ -1,6 +1,5 @@
 import type { ClashType, SingboxType, V2RayType, VpsMap } from '../../types';
 import { DEFAULT_CONFIG } from '../../config';
-import { getUrlGroup } from '../../shared';
 import { Parser } from '../parser';
 import { ClashClient } from './client/clash';
 import { SingboxClient } from './client/singbox';
@@ -10,7 +9,6 @@ export class Confuse {
     private urls: string[] = [];
     private vps: string[] = [];
 
-    private chunkCount: number = Number(DEFAULT_CONFIG.CHUNK_COUNT);
     private backend: string = DEFAULT_CONFIG.BACKEND;
     private parser: Parser | null = null;
 
@@ -19,7 +17,6 @@ export class Confuse {
     private v2rayClient: V2RayClient = new V2RayClient(this.vps);
 
     constructor(env: Env) {
-        this.chunkCount = Number(env.CHUNK_COUNT ?? DEFAULT_CONFIG.CHUNK_COUNT);
         this.backend = env.BACKEND ?? DEFAULT_CONFIG.BACKEND;
         this.parser = null;
     }
@@ -33,26 +30,24 @@ export class Confuse {
         const vps = vpsUrl!.split(/\||\n/).filter(Boolean);
         this.parser = new Parser(vps, [], protocol);
         this.vps = vps;
-
         await this.parser.parse(vps);
+        this.urls = this.parser.urls;
+    }
 
-        const urlGroups = getUrlGroup(Array.from(this.parser.urls), Number(this.chunkCount));
-
-        this.urls = urlGroups.map(urlGroup => {
-            const confuseUrl = new URL(`${this.backend}/sub`);
-            const { searchParams } = new URL(request.url);
-            searchParams.set('url', urlGroup);
-            confuseUrl.search = searchParams.toString();
-            return confuseUrl.toString();
+    public async getClashConfig(request: Request): Promise<ClashType> {
+        return await this.clashClient.getConfig({
+            request,
+            urls: this.urls,
+            backend: this.backend
         });
     }
 
-    public async getClashConfig(): Promise<ClashType> {
-        return await this.clashClient.getConfig(this.urls);
-    }
-
-    public async getSingboxConfig(): Promise<SingboxType> {
-        return await this.singboxClient.getConfig(this.urls);
+    public async getSingboxConfig(request: Request): Promise<SingboxType> {
+        return await this.singboxClient.getConfig({
+            request,
+            urls: this.urls,
+            backend: this.backend
+        });
     }
 
     public async getV2RayConfig(): Promise<V2RayType> {
