@@ -2762,7 +2762,7 @@ function Dr(e, r) {
                             config: '${t[0].value}',
                             backend: '${l}',
                             protocol: '${JSON.stringify(a.map((h) => h.value))}',
-                            advanced: ['emoji', 'new_name','scv'],
+                            advanced: ['emoji', 'new_name', 'udp'],
                             shortServe: '${((p = i[0]) == null ? void 0 : p.value) ?? ""}',
 
                             subUrl: '',
