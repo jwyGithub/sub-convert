@@ -224,7 +224,7 @@ export function showPage(request: Request, env: Env): Response {
                             config: '${remoteConfig[0].value}',
                             backend: '${defaultBackend}',
                             protocol: '${JSON.stringify(protocolConfig.map(item => item.value))}',
-                            advanced: ['emoji', 'new_name','scv'],
+                            advanced: ['emoji', 'new_name', 'udp'],
                             shortServe: '${shortServeConfig[0]?.value ?? ''}',
 
                             subUrl: '',
