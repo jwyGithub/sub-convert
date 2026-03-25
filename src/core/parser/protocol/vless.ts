@@ -1,4 +1,5 @@
 import type { VlessConfig } from '../types';
+import { hasKey } from '../../../shared';
 import { Faker } from '../../../shared/faker';
 import { PsUtil } from '../../../shared/ps';
 
@@ -65,10 +66,20 @@ export class VlessParser extends Faker {
         this.#confuseLink = this.#confuseConfig.href!;
     }
 
+    #restoreWsHeaders(headers: Record<string, string>): Record<string, string> {
+        return hasKey(headers, 'Host')
+            ? {
+                  ...headers,
+                  Host: this.originConfig.add ?? ''
+              }
+            : headers;
+    }
+
     #restoreWs(proxy: Record<string, string | number | any>): void {
         if (proxy.network === 'ws') {
             proxy['ws-opts'] = {
                 ...proxy['ws-opts'],
+                headers: this.#restoreWsHeaders(proxy['ws-opts'].headers),
                 path: decodeURIComponent(this.originConfig.searchParams?.get('path') ?? '/')
             };
         }
@@ -80,7 +91,7 @@ export class VlessParser extends Faker {
         proxy.server = this.originConfig.hostname ?? '';
         proxy.port = Number(this.originConfig?.port ?? 0);
         proxy.uuid = this.originConfig.username ?? '';
-        proxy.alpn = proxy.alpn ? proxy.alpn?.map((i: string) => decodeURIComponent(i)) : proxy.alpn;
+        proxy.alpn = proxy.alpn ? proxy.alpn?.map((i: string) => decodeURIComponent(decodeURIComponent(i))) : proxy.alpn;
         return proxy;
     }
 
@@ -93,7 +104,7 @@ export class VlessParser extends Faker {
             outbound.tls.server_name = this.originConfig.hostname ?? '';
         }
         if (outbound.tls?.alpn) {
-            outbound.tls.alpn = outbound.tls.alpn.map((i: string) => decodeURIComponent(i));
+            outbound.tls.alpn = outbound.tls.alpn.map((i: string) => decodeURIComponent(decodeURIComponent(i)));
         }
         return outbound;
     }

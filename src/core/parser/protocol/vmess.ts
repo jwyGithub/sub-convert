@@ -1,5 +1,6 @@
 import type { VmessConfig } from '../types';
 import { base64Decode, base64Encode } from 'cloudflare-tools';
+import { hasKey } from '../../../shared';
 import { Faker } from '../../../shared/faker';
 import { PsUtil } from '../../../shared/ps';
 
@@ -65,10 +66,20 @@ export class VmessParser extends Faker {
         this.#confuseLink = `vmess://${base64Encode(JSON.stringify(this.#confuseConfig))}`;
     }
 
+    #restoreWsHeaders(headers: Record<string, string>): Record<string, string> {
+        return hasKey(headers, 'Host')
+            ? {
+                  ...headers,
+                  Host: this.originConfig.add ?? ''
+              }
+            : headers;
+    }
+
     #restoreWs(proxy: Record<string, string | number | any>): void {
         if (proxy.network === 'ws') {
             proxy['ws-opts'] = {
                 ...proxy['ws-opts'],
+                headers: this.#restoreWsHeaders(proxy['ws-opts'].headers),
                 path: this.originConfig.path
             };
         }
@@ -80,6 +91,7 @@ export class VmessParser extends Faker {
         proxy.server = this.originConfig.add ?? '';
         proxy.port = Number(this.originConfig?.port ?? 0);
         proxy.uuid = this.originConfig?.id ?? '';
+        hasKey(proxy, 'servername') && (proxy.servername = this.originConfig.add ?? '');
         return proxy;
     }
 
