@@ -5009,7 +5009,7 @@ class pr extends Ae {
 se = new WeakMap(), Ve = new WeakMap(), G = new WeakMap(), $ = new WeakMap(), ae = new WeakMap(), xe = new WeakMap(), Se = new WeakSet(), dr = function(t) {
   return D(t, "Host") ? {
     ...t,
-    Host: this.originConfig.add ?? ""
+    Host: t.Host || this.originConfig.add || ""
   } : t;
 }, hr = function(t) {
   var n;
@@ -5111,7 +5111,7 @@ class fr extends Ae {
 ye = new WeakMap(), Be = new WeakMap(), q = new WeakMap(), V = new WeakMap(), le = new WeakMap(), Ce = new WeakMap(), ke = new WeakSet(), mr = function(t) {
   return D(t, "Host") ? {
     ...t,
-    Host: this.originConfig.add ?? ""
+    Host: t.Host || this.originConfig.add || ""
   } : t;
 }, br = function(t) {
   t.network === "ws" && (t["ws-opts"] = {
