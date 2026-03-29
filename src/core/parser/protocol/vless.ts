@@ -70,7 +70,7 @@ export class VlessParser extends Faker {
         return hasKey(headers, 'Host')
             ? {
                   ...headers,
-                  Host: this.originConfig.add ?? ''
+                  Host: headers.Host || this.originConfig.add || ''
               }
             : headers;
     }
