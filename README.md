@@ -5,7 +5,6 @@
 <p align="center">
   <img src="https://img.shields.io/github/actions/workflow/status/jwyGithub/sub-convert/cloudflare-release.yml?label=cloudflare" alt='cloudflare build'>
   <img src="https://img.shields.io/github/actions/workflow/status/jwyGithub/sub-convert/docker-release.yml?label=docker" alt='docker build'>
-  <img src="https://img.shields.io/github/v/release/jwyGithub/sub-convert?display_name=tag" alt='release'>
   <img src="https://img.shields.io/github/issues/jwyGithub/sub-convert" alt='issues'>
   <img src="https://img.shields.io/github/license/jwyGithub/sub-convert" alt='license'>
 </p>
