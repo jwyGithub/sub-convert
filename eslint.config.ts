@@ -1,4 +1,4 @@
-import { eslint } from '@janone/eslint-config';
+import { eslint } from '@jawyn/eslint-config';
 
 export default eslint(
     {
@@ -10,7 +10,6 @@ export default eslint(
         }
     },
     {
-        ignores: ['pages/*']
+        ignores: ['dist/*']
     }
 );
-

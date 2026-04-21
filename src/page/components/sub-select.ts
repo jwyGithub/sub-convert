@@ -486,4 +486,3 @@ export function SubSelect(): string {
         customElements.define('sub-select', SubSelect);
     </script>`;
 }
-

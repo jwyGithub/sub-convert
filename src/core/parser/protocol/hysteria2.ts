@@ -159,4 +159,3 @@ export class Hysteria2Parser extends Faker {
         return this.#confuseConfig;
     }
 }
-

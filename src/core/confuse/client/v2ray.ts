@@ -12,4 +12,3 @@ export class V2RayClient extends Parser {
         }
     }
 }
-

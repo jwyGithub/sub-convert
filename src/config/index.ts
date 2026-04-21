@@ -4,4 +4,3 @@ export const DEFAULT_CONFIG = {
     REMOTE_CONFIG: '',
     CHUNK_COUNT: '20'
 };
-

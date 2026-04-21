@@ -157,4 +157,3 @@ export function vlessConvert(config: Record<string, any>): string {
 
     return url;
 }
-

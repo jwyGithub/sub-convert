@@ -44,4 +44,3 @@ export function getYamlProxies(proxies: ClashType['proxies']): string[] {
 
     return proxiesList;
 }
-

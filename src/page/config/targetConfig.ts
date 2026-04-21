@@ -5,4 +5,3 @@ export function getTargetConfig(): { label: string; value: string }[] {
         { label: 'v2ray', value: 'v2ray' }
     ];
 }
-

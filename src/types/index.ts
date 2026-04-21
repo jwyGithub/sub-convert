@@ -15,4 +15,3 @@ export interface ShortUrl {
 export * from './Clash';
 export * from './Singbox';
 export * from './V2Ray';
-

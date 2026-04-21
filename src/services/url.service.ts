@@ -1,149 +1,80 @@
+import type { IUrlRepository } from '../db/types';
 import type { ShortUrl } from '../types';
 import { dump } from 'js-yaml';
 import { DEFAULT_CONFIG } from '../config';
 import { Confuse } from '../core/confuse';
 import { Restore } from '../core/restore';
-import { ResponseUtil } from '../shared/response';
+
+export interface SubPayload {
+    body: string;
+    contentType: string;
+}
 
 export class UrlService {
-    constructor(private db?: D1Database) {}
+    constructor(private readonly repo: IUrlRepository | null) {}
 
-    async toSub(request: Request, env: Env, convertType: string): Promise<Response> {
-        try {
-            const confuse = new Confuse(env);
-            await confuse.setSubUrls(request);
+    async toSub(request: Request, env: Env, convertType: string): Promise<SubPayload> {
+        const confuse = new Confuse(env);
+        await confuse.setSubUrls(request);
 
-            const restore = new Restore(confuse);
-            if (['clash', 'clashr'].includes(convertType)) {
-                const originConfig = await restore.getClashConfig();
-                return new Response(dump(originConfig, { indent: 2, lineWidth: 200 }), {
-                    headers: new Headers({
-                        'Content-Type': 'text/yaml; charset=UTF-8',
-                        'Cache-Control': 'no-store'
-                    })
-                });
-            }
+        const restore = new Restore(confuse);
 
-            if (convertType === 'singbox') {
-                const originConfig = await restore.getSingboxConfig();
-                return new Response(JSON.stringify(originConfig), {
-                    headers: new Headers({
-                        'Content-Type': 'text/plain; charset=UTF-8',
-                        'Cache-Control': 'no-store'
-                    })
-                });
-            }
-
-            if (convertType === 'v2ray') {
-                const originConfig = await restore.getV2RayConfig();
-                return new Response(originConfig, {
-                    headers: new Headers({
-                        'Content-Type': 'text/plain; charset=UTF-8',
-                        'Cache-Control': 'no-store'
-                    })
-                });
-            }
-
-            return ResponseUtil.error('Unsupported client type, support list: clash, singbox, v2ray');
-        } catch (error: any) {
-            throw new Error(error.message || 'Invalid request');
+        if (['clash', 'clashr'].includes(convertType)) {
+            const originConfig = await restore.getClashConfig();
+            return {
+                body: dump(originConfig, { indent: 2, lineWidth: 200 }),
+                contentType: 'text/yaml; charset=UTF-8'
+            };
         }
+
+        if (convertType === 'singbox') {
+            const originConfig = await restore.getSingboxConfig();
+            return {
+                body: JSON.stringify(originConfig),
+                contentType: 'text/plain; charset=UTF-8'
+            };
+        }
+
+        if (convertType === 'v2ray') {
+            const originConfig = await restore.getV2RayConfig();
+            return {
+                body: originConfig,
+                contentType: 'text/plain; charset=UTF-8'
+            };
+        }
+
+        throw new Error('Unsupported client type, support list: clash, singbox, v2ray');
     }
 
-    async getVersion(request: Request, env: Env): Promise<Response> {
+    getVersionRedirect(request: Request, env: Env): string {
         const { searchParams } = new URL(request.url);
         const backend = searchParams.get('backend') ?? env.BACKEND ?? DEFAULT_CONFIG.BACKEND;
-        return Response.redirect(`${backend}/version`, 302);
+        return `${backend}/version`;
     }
 
     async add(long_url: string, baseUrl: string): Promise<ShortUrl> {
-        if (!this.db) {
-            throw new Error('Database is not initialized');
-        }
-
-        const code = this.generateShortCode();
-        const short_url = `${baseUrl}/${code}`;
-
-        const result = await this.db
-            .prepare('INSERT INTO short_url (short_code, short_url, long_url) VALUES (?, ?, ?) RETURNING id')
-            .bind(code, short_url, long_url)
-            .first<{ id: number }>();
-
-        if (!result?.id) {
-            throw new Error('Failed to create short URL');
-        }
-
-        return { id: result.id, short_code: code, short_url, long_url };
-    }
-
-    async delete(id: number): Promise<void> {
-        if (!this.db) {
-            throw new Error('Database is not initialized');
-        }
-
-        await this.db.prepare('DELETE FROM short_url WHERE id = ?').bind(id).run();
-    }
-
-    async getById(id: number): Promise<ShortUrl | null> {
-        if (!this.db) {
-            throw new Error('Database is not initialized');
-        }
-
-        return await this.db.prepare('SELECT id, short_url, long_url FROM short_url WHERE id = ?').bind(id).first<ShortUrl>();
-    }
-
-    async getList(page = 1, pageSize = 10): Promise<{ total: number; items: ShortUrl[] }> {
-        if (!this.db) {
-            throw new Error('Database is not initialized');
-        }
-
-        const offset = (page - 1) * pageSize;
-        const [total, items] = await Promise.all([
-            this.db.prepare('SELECT COUNT(*) as count FROM short_url').first<{ count: number }>(),
-            this.db
-                .prepare('SELECT id, short_code, short_url, long_url FROM short_url LIMIT ? OFFSET ?')
-                .bind(pageSize, offset)
-                .all<ShortUrl>()
-        ]);
-
-        return {
-            total: total?.count || 0,
-            items: items?.results || []
-        };
-    }
-
-    async getByShortUrl(short_url: string): Promise<ShortUrl | null> {
-        if (!this.db) {
-            throw new Error('Database is not initialized');
-        }
-
-        return await this.db
-            .prepare('SELECT id, short_code, short_url, long_url FROM short_url WHERE short_url = ?')
-            .bind(short_url)
-            .first<ShortUrl>();
-    }
-
-    async getByCode(code: string): Promise<ShortUrl | null> {
-        if (!this.db) {
-            throw new Error('Database is not initialized');
-        }
-
-        return await this.db
-            .prepare('SELECT id, short_code, short_url, long_url FROM short_url WHERE short_code = ?')
-            .bind(code)
-            .first<ShortUrl>();
+        this.ensureRepo();
+        return this.repo!.add(long_url, baseUrl);
     }
 
     async deleteByCode(code: string): Promise<void> {
-        if (!this.db) {
-            throw new Error('Database is not initialized');
-        }
-
-        await this.db.prepare('DELETE FROM short_url WHERE short_code = ?').bind(code).run();
+        this.ensureRepo();
+        return this.repo!.deleteByCode(code);
     }
 
-    private generateShortCode(): string {
-        return crypto.randomUUID().substring(0, 8);
+    async getByCode(code: string): Promise<ShortUrl | null> {
+        this.ensureRepo();
+        return this.repo!.getByCode(code);
+    }
+
+    async getList(page = 1, pageSize = 10): Promise<{ total: number; items: ShortUrl[] }> {
+        this.ensureRepo();
+        return this.repo!.getList(page, pageSize);
+    }
+
+    private ensureRepo(): void {
+        if (!this.repo) {
+            throw new Error('Short URL service is not enabled (no repository configured)');
+        }
     }
 }
-

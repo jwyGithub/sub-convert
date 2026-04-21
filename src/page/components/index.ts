@@ -9,4 +9,3 @@ import { SubSelect } from './sub-select';
 import { SubTextarea } from './sub-textarea';
 
 export { SubButton, SubCheckbox, SubForm, SubFormItem, SubInput, SubMessage, SubMultiSelect, SubSelect, SubTextarea };
-

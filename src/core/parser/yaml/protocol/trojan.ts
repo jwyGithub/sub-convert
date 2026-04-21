@@ -105,4 +105,3 @@ export function trojanConvert(config: Record<string, any>): string {
 
     return trojanUrl;
 }
-

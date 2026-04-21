@@ -10,4 +10,3 @@ export function getProtocolConfig(): { label: string; value: string }[] {
         { label: 'HY2', value: 'hy2' }
     ];
 }
-

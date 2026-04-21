@@ -58,4 +58,3 @@ export function hysteria2Convert(config: Record<string, any>): string {
 
     return hysteria2Url;
 }
-

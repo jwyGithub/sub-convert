@@ -135,4 +135,3 @@ export class TrojanParser extends Faker {
         return this.#confuseConfig;
     }
 }
-

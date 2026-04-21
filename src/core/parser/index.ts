@@ -142,4 +142,3 @@ export class Parser extends Convert {
         return Array.from(this.originUrls);
     }
 }
-

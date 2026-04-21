@@ -1,6 +1,6 @@
 {
     "$schema": "https://json.schemastore.org/tsconfig",
-    "extends": "@janone/tsconfig/tsconfig.node.json",
+    "extends": "@jawyn/tsconfig/tsconfig.node.json",
     "compilerOptions": {
         "target": "es2022",
         "jsx": "react-jsx",
@@ -10,7 +10,7 @@
         "module": "es2022",
         "moduleResolution": "Bundler",
         "resolveJsonModule": true,
-        "types": ["@cloudflare/workers-types/2023-07-01"],
+        "types": ["@cloudflare/workers-types/2023-07-01", "node"],
         "allowJs": true,
         "checkJs": false,
         "strict": true,
@@ -23,4 +23,3 @@
     "include": ["worker-configuration.d.ts", "src/**/*.ts"],
     "exclude": ["test"]
 }
-

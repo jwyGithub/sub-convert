@@ -30,6 +30,5 @@ export function isJson(text: string): boolean {
 }
 
 export function hasKey(obj: Record<string, any>, key: string): boolean {
-    return Object.prototype.hasOwnProperty.call(obj, key);
+    return Object.hasOwn(obj, key);
 }
-

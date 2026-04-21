@@ -455,4 +455,3 @@ export function SubMultiSelect(): string {
         customElements.define('sub-multi-select', SubMultiSelect);
     </script>`;
 }
-

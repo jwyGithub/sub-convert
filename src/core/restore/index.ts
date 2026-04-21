@@ -27,4 +27,3 @@ export class Restore {
         return v2rayClient.getOriginConfig();
     }
 }
-

@@ -152,4 +152,3 @@ export class VmessParser extends Faker {
         return this.#confuseConfig;
     }
 }
-

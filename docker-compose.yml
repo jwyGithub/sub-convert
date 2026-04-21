@@ -1,0 +1,30 @@
+services:
+    sub-convert:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: sub-convert:latest
+        container_name: sub-convert
+        restart: unless-stopped
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./data:/data
+        environment:
+            # ---- 转换相关 ----
+            BACKEND: https://url.v1.mk
+            # DEFAULT_BACKEND: http://your-domain
+            # CUSTOM_BACKEND: |
+            #     https://sub.d1.mk
+            #     https://v.id9.cc
+            # REMOTE_CONFIG: |
+            #     https://example.com/custom.ini
+            # LOCK_BACKEND: 'false'
+            CHUNK_COUNT: '20'
+            # ---- 短链服务 ----
+            DATABASE_DRIVER: sqlite
+            SQLITE_PATH: /data/sub-convert.sqlite
+            # ---- 运行时 ----
+            PORT: '3000'
+            HOST: 0.0.0.0
+

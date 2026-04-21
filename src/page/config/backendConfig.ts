@@ -25,4 +25,3 @@ export function getBackendConfig(request: Request, env: Env): { label: string; v
             { label: 'sub作者&lhie1提供', value: 'https://api.dler.io' }
         );
 }
-

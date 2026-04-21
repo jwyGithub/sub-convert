@@ -63,4 +63,3 @@ export class Confuse {
         return this.parser?.vpsMap;
     }
 }
-

@@ -144,4 +144,3 @@ export class SsrParser extends Faker {
         return this.#confuseConfig;
     }
 }
-

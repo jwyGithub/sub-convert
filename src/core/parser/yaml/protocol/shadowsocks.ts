@@ -108,4 +108,3 @@ export function shadowsocksConvert(config: Record<string, any>): string {
 
     return ssUrl;
 }
-

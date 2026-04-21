@@ -1,12 +1,15 @@
-name: convert release
+name: cloudflare release
 
 on:
     push:
-        branches:
-            - main
-        paths-ignore:
-            - README.md
-            - LICENSE
+        tags:
+            - 'v*.*.*'
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: Manual tag to publish (e.g. v0.1.0)
+                required: false
+                default: ''
 
 jobs:
     build:
@@ -20,12 +23,13 @@ jobs:
               with:
                   node-version: latest
             - run: pnpm install --no-frozen-lockfile
-            - run: pnpm run pages
+            - name: Build Cloudflare Worker bundle
+              run: pnpm run build:worker
             - name: Upload artifact
               uses: actions/upload-artifact@v4
               with:
-                  name: build-convert
-                  path: pages
+                  name: cloudflare-worker
+                  path: dist/worker
 
     deploy:
         runs-on: ubuntu-latest
@@ -35,26 +39,25 @@ jobs:
             - name: Download artifact
               uses: actions/download-artifact@v4
               with:
-                  name: build-convert
-                  path: pages
-            - name: Zip pages folder
+                  name: cloudflare-worker
+                  path: dist/worker
+            - name: Pack _worker.zip for Pages direct-upload
               run: |
-                  worker_file=$(find pages -name '*worker*.js' -type f)
+                  worker_file=$(find dist/worker -name '*worker*.js' -type f)
                   if [ -z "$worker_file" ]; then
                       echo "Error: No worker file found"
                       exit 1
                   fi
                   echo "Found worker file: $worker_file"
                   zip -j _worker.zip "$worker_file"
-                  mv _worker.zip pages/
-            - name: List contents of pages directory
-              run: ls -al pages
-            - name: Deploy to GitHub Pages
+                  mv _worker.zip dist/worker/
+            - name: List contents of dist/worker
+              run: ls -al dist/worker
+            - name: Deploy to release branch
               uses: peaceiris/actions-gh-pages@v4
               with:
                   github_token: ${{ secrets.DEPLOY_TOKEN }}
-                  publish_dir: pages
+                  publish_dir: dist/worker
                   publish_branch: release
                   keep_files: false
                   enable_jekyll: true
-

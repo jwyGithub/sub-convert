@@ -3,28 +3,44 @@
     "type": "module",
     "version": "0.0.1",
     "private": true,
+    "engines": {
+        "node": ">=24.0.0"
+    },
     "scripts": {
         "deploy": "wrangler deploy",
         "dev": "wrangler dev",
         "start": "wrangler dev",
         "cf-typegen": "wrangler types",
-        "pages": "vite build"
+        "build": "tsdown",
+        "build:worker": "tsdown -F worker",
+        "build:node": "tsdown -F node",
+        "pages": "tsdown -F worker",
+        "dev:node": "NODE_OPTIONS=--no-warnings=ExperimentalWarning tsx watch src/adapters/node.ts",
+        "start:node": "NODE_OPTIONS=--no-warnings=ExperimentalWarning node dist/node/server.mjs",
+        "docker:build": "docker build -t sub-convert .",
+        "docker:run": "docker run --rm -p 3000:3000 -v sub-data:/data sub-convert",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix"
     },
     "dependencies": {
+        "@hono/node-server": "^2.0.0",
         "cloudflare-tools": "^0.2.3",
+        "hono": "^4.12.14",
         "js-yaml": "^4.1.0"
     },
     "devDependencies": {
-        "@cloudflare/workers-types": "^4.20251225.0",
-        "@janone/eslint-config": "^0.0.4",
-        "@janone/prettier-config": "^0.0.1",
-        "@janone/tsconfig": "^0.0.1",
+        "@cloudflare/workers-types": "^4.20260421.1",
+        "@jawyn/eslint-config": "^0.0.1",
+        "@jawyn/prettier-config": "^0.0.1",
+        "@jawyn/tsconfig": "^0.0.1",
         "@types/js-yaml": "^4.0.9",
-        "@types/node": "^22.10.2",
-        "eslint": "^9.10.0",
-        "prettier": "^3.4.1",
+        "@types/node": "^24.12.2",
+        "eslint": "^10.2.1",
+        "jiti": "^2.6.1",
+        "prettier": "^3.8.3",
+        "tsdown": "^0.21.9",
+        "tsx": "^4.21.0",
         "typescript": "^5.7.2",
-        "vite": "^6.0.1",
-        "wrangler": "^4.56.0"
+        "wrangler": "^4.84.0"
     }
 }

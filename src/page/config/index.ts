@@ -6,4 +6,3 @@ import { getShortServeConfig } from './shortServeConfig';
 import { getTargetConfig } from './targetConfig';
 
 export { getAdvancedConfig, getBackendConfig, getProtocolConfig, getRemoteConfig, getShortServeConfig, getTargetConfig };
-

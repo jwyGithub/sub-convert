@@ -60,4 +60,3 @@ export class SingboxClient {
         return PsUtil.isConfigType(tag);
     }
 }
-

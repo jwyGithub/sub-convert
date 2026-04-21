@@ -85,4 +85,3 @@ export function vmessConvert(config: Record<string, any>): string {
 
     return `vmess://${base64String}`;
 }
-
