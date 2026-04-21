@@ -28,6 +28,25 @@ jobs:
               with:
                   fetch-depth: 0
 
+            - name: Resolve release version
+              id: resolve
+              shell: bash
+              run: |
+                  INPUT="${{ inputs.tag }}"
+                  if [ -n "$INPUT" ]; then
+                      # workflow_dispatch with manual input
+                      RAW="$INPUT"
+                      [[ "$RAW" != v* ]] && RAW="v$RAW"
+                  elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
+                      # tag push event
+                      RAW="${GITHUB_REF#refs/tags/}"
+                  else
+                      echo "::error::This workflow must be triggered by a tag push (v*.*.*) or with a manual 'tag' input"
+                      exit 1
+                  fi
+                  echo "version=$RAW" >> "$GITHUB_OUTPUT"
+                  echo "Resolved version: $RAW"
+
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v3
 
@@ -47,16 +66,16 @@ jobs:
               with:
                   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
                   tags: |
-                      type=ref,event=tag
-                      type=semver,pattern={{version}}
-                      type=semver,pattern={{major}}.{{minor}}
-                      type=semver,pattern={{major}}
-                      type=raw,value=latest,enable=${{ startsWith(github.ref, 'refs/tags/v') }}
+                      type=semver,pattern={{version}},value=${{ steps.resolve.outputs.version }}
+                      type=semver,pattern={{major}}.{{minor}},value=${{ steps.resolve.outputs.version }}
+                      type=semver,pattern={{major}},value=${{ steps.resolve.outputs.version }}
+                      type=raw,value=latest
                   labels: |
                       org.opencontainers.image.title=sub-convert
                       org.opencontainers.image.description=Subscription converter for Clash / sing-box / v2ray on Cloudflare Workers & Docker
                       org.opencontainers.image.source=https://github.com/${{ github.repository }}
                       org.opencontainers.image.licenses=MIT
+                      org.opencontainers.image.version=${{ steps.resolve.outputs.version }}
 
             - name: Build and push image
               uses: docker/build-push-action@v6
