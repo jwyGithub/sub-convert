@@ -8,7 +8,6 @@ import { repoMiddleware } from './middleware/repo';
 import { registerRoutes } from './routes';
 
 export interface CreateAppOptions {
-    /** 短链服务仓储，null 表示未启用 */
     repo: IUrlRepository | null;
 }
 
@@ -31,3 +30,4 @@ export function createApp(options: CreateAppOptions): Hono<AppBindings> {
 
     return app;
 }
+

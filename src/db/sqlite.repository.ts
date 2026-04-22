@@ -5,10 +5,6 @@ import { dirname } from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { generateShortCode } from './types';
 
-/**
- * 基于 Node 内置 node:sqlite（Node 22.5+ 引入，Node 23+ 默认启用）的仓储实现。
- * 好处：零原生模块依赖，Docker 镜像不再需要 python3/make/g++，也无 postinstall。
- */
 export class SqliteUrlRepository implements IUrlRepository {
     private readonly db: DatabaseSync;
 
@@ -55,17 +51,15 @@ export class SqliteUrlRepository implements IUrlRepository {
     }
 
     async getByCode(code: string): Promise<ShortUrl | null> {
-        const row = this.db
-            .prepare('SELECT id, short_code, short_url, long_url FROM short_url WHERE short_code = ?')
-            .get(code) as ShortUrl | undefined;
+        const row = this.db.prepare('SELECT id, short_code, short_url, long_url FROM short_url WHERE short_code = ?').get(code) as
+            | ShortUrl
+            | undefined;
         return row ? { ...row } : null;
     }
 
     async getList(page: number, pageSize: number): Promise<{ total: number; items: ShortUrl[] }> {
         const offset = (page - 1) * pageSize;
-        const totalRow = this.db.prepare('SELECT COUNT(*) as count FROM short_url').get() as
-            | { count: number }
-            | undefined;
+        const totalRow = this.db.prepare('SELECT COUNT(*) as count FROM short_url').get() as { count: number } | undefined;
         const items = this.db
             .prepare('SELECT id, short_code, short_url, long_url FROM short_url LIMIT ? OFFSET ?')
             .all(pageSize, offset) as unknown as ShortUrl[];
@@ -76,3 +70,4 @@ export class SqliteUrlRepository implements IUrlRepository {
         };
     }
 }
+

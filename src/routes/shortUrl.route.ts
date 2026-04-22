@@ -20,6 +20,5 @@ shortUrlRoute.post('/api/add', c => withController(c).add(c));
 shortUrlRoute.delete('/api/delete', c => withController(c).delete(c));
 shortUrlRoute.get('/api/queryByCode', c => withController(c).queryByCode(c));
 shortUrlRoute.get('/api/queryList', c => withController(c).queryList(c));
-
-// 短链跳转必须放在最后，避免吞掉其他精确路由
 shortUrlRoute.get('/:code', c => withController(c).redirect(c));
+
