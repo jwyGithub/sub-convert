@@ -32,8 +32,8 @@ export class SqliteUrlRepository implements IUrlRepository {
         }
     }
 
-    async add(long_url: string, baseUrl: string): Promise<ShortUrl> {
-        const code = generateShortCode();
+    async add(long_url: string, baseUrl: string, customCode?: string): Promise<ShortUrl> {
+        const code = customCode?.trim() ? customCode.trim() : generateShortCode();
         const short_url = `${baseUrl}/${code}`;
         const created_at = new Date().toISOString();
 

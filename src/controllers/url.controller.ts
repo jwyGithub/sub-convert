@@ -34,14 +34,31 @@ export class UrlController {
     }
 
     async add(c: Context<AppBindings>): Promise<Response> {
-        const payload = await c.req.json<{ long_url?: string; serve?: string }>();
+        const payload = await c.req.json<{ long_url?: string; serve?: string; short_code?: string }>();
         if (!payload?.long_url) {
             throw new HTTPException(400, { message: 'Missing long_url' });
         }
 
+        // 可选的自定义短码后缀：留空则由仓库层自动生成随机短码
+        let customCode: string | undefined;
+        const rawCode = payload.short_code?.trim();
+        if (rawCode) {
+            if (!/^[\w-]{1,64}$/.test(rawCode)) {
+                throw new HTTPException(400, {
+                    message: '自定义后缀仅支持字母、数字、下划线和短横线，长度 1-64'
+                });
+            }
+            // 校验是否已存在，存在则提示（避免覆盖已有短链）
+            const existing = await this.service.getByCode(rawCode);
+            if (existing) {
+                throw new HTTPException(409, { message: '该短链后缀已存在，请更换' });
+            }
+            customCode = rawCode;
+        }
+
         const url = new URL(c.req.url);
         const baseUrl = payload.serve || `${url.protocol}//${url.host}`;
-        const result = await this.service.add(payload.long_url, baseUrl);
+        const result = await this.service.add(payload.long_url, baseUrl, customCode);
         return c.json({ data: result });
     }
 

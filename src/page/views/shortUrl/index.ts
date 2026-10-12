@@ -1,5 +1,5 @@
 import { getConfiguredAdminKey } from '../../../shared/adminKey';
-import { SubButton, SubForm, SubFormItem, SubMessage, SubModal, SubTable, SubTextarea } from '../../components';
+import { SubButton, SubForm, SubFormItem, SubInput, SubMessage, SubModal, SubTable, SubTextarea } from '../../components';
 import { theme } from '../../script/theme';
 import { layout } from '../../style/layout';
 import { style } from '../../style/style';
@@ -139,6 +139,12 @@ export function showShortUrlPage(_request: Request, env: Env): Response {
                                 rows="4"
                             ></sub-textarea>
                         </sub-form-item>
+                        <sub-form-item label="自定义后缀">
+                            <sub-input
+                                key="short_code"
+                                placeholder="可选，留空则自动生成"
+                            ></sub-input>
+                        </sub-form-item>
                     </sub-form>
                     <div class="modal-form-actions" slot="footer">
                         <sub-button id="cancel-create-btn" type="default">取消</sub-button>
@@ -149,6 +155,7 @@ export function showShortUrlPage(_request: Request, env: Env): Response {
                 </sub-modal>
 
                 ${SubTextarea()}
+                ${SubInput()}
                 ${SubFormItem()}
                 ${SubForm()}
                 ${SubButton()}
@@ -165,7 +172,7 @@ export function showShortUrlPage(_request: Request, env: Env): Response {
                         #page = 1;
                         #pageSize = 20;
                         #total = 0;
-                        #model = { long_url: '' };
+                        #model = { long_url: '', short_code: '' };
                         #storageKey = 'short_url_admin_key';
 
                         #main = document.querySelector('#short-url-main');
@@ -396,12 +403,18 @@ export function showShortUrlPage(_request: Request, env: Env): Response {
                                 return;
                             }
 
+                            const customCode = (this.#model.short_code || '').trim();
+                            if (customCode && !/^[a-zA-Z0-9_-]{1,64}$/.test(customCode)) {
+                                notification.error('自定义后缀仅支持字母、数字、下划线和短横线，长度 1-64');
+                                return;
+                            }
+
                             const serve = \`\${location.protocol}//\${location.host}\`;
                             try {
                                 const res = await fetch('/api/add', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ long_url: longUrl, serve })
+                                    body: JSON.stringify({ long_url: longUrl, serve, short_code: customCode })
                                 });
                                 if (!res.ok) {
                                     let message = '生成短链失败';
@@ -413,6 +426,7 @@ export function showShortUrlPage(_request: Request, env: Env): Response {
                                 }
                                 notification.success('生成短链成功');
                                 this.#model.long_url = '';
+                                this.#model.short_code = '';
                                 this.#form.setAttribute('model', JSON.stringify(this.#model));
                                 this.#closeModal();
                                 this.#page = 1;

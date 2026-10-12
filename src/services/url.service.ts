@@ -52,9 +52,9 @@ export class UrlService {
         return `${backend}/version`;
     }
 
-    async add(long_url: string, baseUrl: string): Promise<ShortUrl> {
+    async add(long_url: string, baseUrl: string, customCode?: string): Promise<ShortUrl> {
         this.ensureRepo();
-        return this.repo!.add(long_url, baseUrl);
+        return this.repo!.add(long_url, baseUrl, customCode);
     }
 
     async deleteByCode(code: string): Promise<void> {
