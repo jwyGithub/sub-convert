@@ -30,6 +30,7 @@ export function SubInput(): string {
                         display: inline-flex;
                         width: 100%;
                         line-height: 32px;
+                        min-height: 32px;
                     }
                     .sub-input__wrapper {
                         display: flex;

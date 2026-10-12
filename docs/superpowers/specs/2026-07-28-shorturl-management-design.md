@@ -1,7 +1,7 @@
 # Short URL Management Page Design
 
-**Date:** 2026-07-28  
-**Status:** Approved  
+**Date:** 2026-07-28
+**Status:** Approved
 **Scope:** Frontend management page for existing short URL APIs
 
 ## Goal
