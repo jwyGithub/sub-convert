@@ -127,6 +127,28 @@ describe('clashClient 合并逻辑', () => {
         expect(result['proxy-groups'].find(g => g.name === 'G')?.proxies).toEqual(['A', 'B']);
     });
 
+    it('保持第一个配置的原始字段顺序（proxies / proxy-groups 不被挪到末尾）', async () => {
+        mockSubscriptions({
+            u1: {
+                dns: { enable: true },
+                proxies: [{ name: 'A', server: '1.1.1.1' }],
+                'proxy-groups': [{ name: 'G', type: 'select', proxies: ['A'] }],
+                rules: ['DOMAIN,a.com,PROXY']
+            },
+            u2: {
+                dns: { enable: false },
+                proxies: [{ name: 'B', server: '2.2.2.2' }],
+                'proxy-groups': [{ name: 'G', type: 'select', proxies: ['B'] }],
+                rules: ['DOMAIN,b.com,DIRECT']
+            }
+        });
+
+        const result = await client.getConfig(['u1', 'u2']);
+
+        // 输出的字段顺序应与第一份配置完全一致，而不是把 proxies/proxy-groups 排到末尾
+        expect(Object.keys(result)).toEqual(['dns', 'proxies', 'proxy-groups', 'rules']);
+    });
+
     it('缺少 proxies / proxy-groups 字段时也能正常合并', async () => {
         mockSubscriptions({
             u1: { proxies: [{ name: 'A', server: '1.1.1.1' }] }, // 没有 proxy-groups

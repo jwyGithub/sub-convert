@@ -48,6 +48,9 @@ export class ClashClient {
             // 仅保留第一个配置里除 proxies / proxy-groups 外的其他字段（如 rules、dns 等），
             // 这样第一份配置的 proxies/proxy-groups 原始容器可被尽早回收。
             let base: Record<string, any> | null = null;
+            // 记录第一份配置的原始键顺序（含 proxies / proxy-groups 的位置），
+            // 以便最终输出时与原配置文件保持一致的字段顺序（不写死顺序）。
+            let keyOrder: string[] = [];
 
             for (let i = 0; i < sources.length; i++) {
                 const config = load(sources[i]) as ClashType;
@@ -56,7 +59,8 @@ export class ClashClient {
 
                 if (base === null) {
                     base = {};
-                    for (const key of Object.keys(config)) {
+                    keyOrder = Object.keys(config);
+                    for (const key of keyOrder) {
                         if (key !== 'proxies' && key !== 'proxy-groups') {
                             base[key] = (config as Record<string, any>)[key];
                         }
@@ -95,11 +99,27 @@ export class ClashClient {
                 // 本轮解析树 config 不再被引用（proxy 对象已被 mergedProxies 持有），可被 GC
             }
 
-            return {
-                ...(base as ClashType),
-                proxies: mergedProxies,
-                'proxy-groups': groupOrder.map(name => groupMap.get(name)!)
-            };
+            // 按第一份配置的原始键顺序重建对象，将合并后的 proxies / proxy-groups
+            // 放回它们在原配置中的位置；若原配置缺少这两个字段则补到末尾。
+            const mergedGroups = groupOrder.map(name => groupMap.get(name)!);
+            const merged: Record<string, any> = {};
+            let proxiesPlaced = false;
+            let groupsPlaced = false;
+            for (const key of keyOrder) {
+                if (key === 'proxies') {
+                    merged.proxies = mergedProxies;
+                    proxiesPlaced = true;
+                } else if (key === 'proxy-groups') {
+                    merged['proxy-groups'] = mergedGroups;
+                    groupsPlaced = true;
+                } else {
+                    merged[key] = (base as Record<string, any>)[key];
+                }
+            }
+            if (!proxiesPlaced) merged.proxies = mergedProxies;
+            if (!groupsPlaced) merged['proxy-groups'] = mergedGroups;
+
+            return merged as ClashType;
         } catch (error: any) {
             throw new Error(`Failed to merge clash config: ${error.message || error}`);
         }
