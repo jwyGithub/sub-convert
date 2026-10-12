@@ -579,6 +579,7 @@ var e=(e,t,n)=>(r,i)=>{let a=-1;return o(0);async function o(s){if(s<=a)throw Er
                         display: inline-flex;
                         width: 100%;
                         line-height: 32px;
+                        min-height: 32px;
                     }
                     .sub-input__wrapper {
                         display: flex;
